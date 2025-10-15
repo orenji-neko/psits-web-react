@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Maximize2, Minimize2, Trophy, X, Trash2 } from 'lucide-react';
 
 export default function EventRaffleTwo() {
@@ -23,7 +23,11 @@ export default function EventRaffleTwo() {
     "Miguel Antonio D. Rodriguez",
     "Patricia Anne M. Martinez",
     "Christopher Jay L. Gonzales",
-    "Mary Grace T. Aquino"
+    "Mary Grace T. Aquino",
+    "Jan",
+    "Jan7238921321",
+    "Barrats",
+    "Antonio"
   ];
 
   // Remove duplicates from initial list
@@ -38,12 +42,27 @@ export default function EventRaffleTwo() {
   const [winnersHistory, setWinnersHistory] = useState([]);
   const [isWinnersSidebarOpen, setIsWinnersSidebarOpen] = useState(false);
   const [availableParticipants, setAvailableParticipants] = useState(uniqueParticipants);
+  const containerRef = useRef(null);
+
 
   const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
+      if (!document.fullscreenElement) {
+      containerRef.current
+        ?.requestFullscreen()
+        .then(() => {
+          setIsFullscreen(true);
+        })
+        .catch((err) => {
+          console.error("Error attempting to enable fullscreen:", err);
+        });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      });
+    }
   };
 
-  // Effect to scale names as they pass through center
+  // Effect to scale names as they pass through center(For animation only)
   React.useEffect(() => {
     const scaleInterval = setInterval(() => {
       const container = document.querySelector('.h-64.sm\\:h-80.md\\:h-96');
@@ -125,33 +144,45 @@ export default function EventRaffleTwo() {
   const removeWinner = (id) => {
     const winnerToRemove = winnersHistory.find(w => w.id === id);
     if (winnerToRemove) {
-      // Add the participant back to available list
+      // Add the participant back to available list. Optional ra ni
       setAvailableParticipants(prev => [...prev, winnerToRemove.name]);
     }
     setWinnersHistory(prev => prev.filter(w => w.id !== id));
   };
 
-  const manyParticipants = [];
-  for (let i = 0; i < 20; i++) {
-    manyParticipants.push(...availableParticipants);
-  }
+  //for visual scrolling or spinningg only
+  let manyParticipants;
+    if (availableParticipants.length < 100) {
+      // Duplicate only if few participants
+      manyParticipants = [];
+      for (let i = 0; i < 20; i++) {
+        manyParticipants.push(...availableParticipants);
+      }
+    } else {
+      // Large data already long enough for spinning
+      manyParticipants = availableParticipants;
+    }
+
+  
 
   return (
-    <div className={`${isFullscreen ? 'fixed inset-0 z-[9999] bg-white' : 'min-h-screen bg-transparent'} flex items-center justify-center p-2 sm:p-4 md:p-8`}>
+    <div 
+    ref={containerRef}
+    className={`${isFullscreen ? 'fixed inset-0 z-[9999] bg-white' : 'min-h-screen bg-transparent'} flex items-center justify-center p-2 sm:p-4 md:p-8`}>
       <style>{`
         .scroll-animation-decelerate {
           transition: transform 5s cubic-bezier(0.1, 0.6, 0.3, 1);
         }
         
-   .lever-up { 
-              transition: transform 0.5s ease-out; 
-                transform: rotate(-160deg); 
-              transform-origin: top center; } 
-   .lever-down { 
-              transition: transform 0.5s ease-in; 
-                  transform: rotate(-10deg); 
-              transform-origin: top center; }
-        
+        .lever-up { 
+                    transition: transform 0.5s ease-out; 
+                      transform: rotate(-160deg); 
+                    transform-origin: top center; } 
+        .lever-down { 
+                    transition: transform 0.5s ease-in; 
+                        transform: rotate(-10deg); 
+                    transform-origin: top center; }
+              
        
         /* Scale effect for names passing through center */
         .name-item {
@@ -227,12 +258,12 @@ export default function EventRaffleTwo() {
                   
                   {/* Lever on the right side - hidden on small screens */}
                   <div className="hidden md:block absolute -right-12 lg:-right-20 top-1/4 z-20">
-                        <div className="w-10 h-10 lg:w-12 lg:h-20 bg-[#D9D9D9]  shadow-xl border-4 rounded-xl relative top-12 border-[#D9D9D9]"></div>
+                        <div className="w-10 h-20 lg:w-12 lg:h-20 bg-[#D9D9D9]  shadow-xl border-4 rounded-xl relative top-12 border-[#D9D9D9]"></div>
 
                     <div className={`${isDecelerating ? 'lever-down' : 'lever-up'}`}>
                       {/* Ball/Knob at top */}
                       {/* Lever arm */}
-                      <div className="w-2.5 lg:w-3 h-48 lg:h-20 bg-[#B7B7B7] rounded-full mx-auto shadow-xl"></div>
+                      <div className="w-2.5 lg:w-3 h-20 lg:h-20 bg-[#B7B7B7] rounded-full mx-auto shadow-xl"></div>
                       <div className="w-10 h-10 lg:w-12 lg:h-12 bg-[#074873] rounded-full shadow-xl border-4 border-[#074873]"></div>
 
                     </div>
@@ -299,7 +330,7 @@ export default function EventRaffleTwo() {
                     } relative bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-2xl px-8 py-4 flex items-center justify-center gap-3 font-bold text-lg shadow-lg hover:from-cyan-600 hover:to-blue-700 transition-all`}
                   >
                     <span>
-                      {isDecelerating ? ' SPINNING...' : availableParticipants.length === 0 ? '🎡 NO PARTICIPANTS' : ' START RAFFLE'}
+                      {isDecelerating ? ' SPINNING...' : availableParticipants.length === 0 ? ' NO PARTICIPANTS' : ' START RAFFLE'}
                     </span>
                   </button>
 
@@ -416,23 +447,23 @@ export default function EventRaffleTwo() {
                 </div>
               )}
               
-              <div className="text-center relative z-10">
-                <div className="text-7xl mb-4">🎉</div>
-                <h2 className="text-5xl font-black bg-gradient-to-r from-[#074873] via-cyan-500 to-blue-500 bg-clip-text text-transparent mb-6">
-                  WINNER!
-                </h2>
-                <div className="bg-gradient-to-br from-cyan-200 via-blue-200 to-sky-200 rounded-2xl p-8 mb-6 border-4 border-[#074873] shadow-xl transform hover:scale-105 transition-transform">
-                  <p className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#074873] to-cyan-600">
-                    {winner}
-                  </p>
+                <div className="text-center relative z-10">
+                  <div className="text-7xl mb-4">🎉</div>
+                  <h2 className="text-5xl font-black bg-gradient-to-r from-[#074873] via-cyan-500 to-blue-500 bg-clip-text text-transparent mb-6">
+                    WINNER!
+                  </h2>
+                  <div className="bg-gradient-to-br from-cyan-200 via-blue-200 to-sky-200 rounded-2xl p-8 mb-6 border-4 border-[#074873] shadow-xl transform hover:scale-105 transition-transform">
+                    <p className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#074873] to-cyan-600">
+                      {winner}
+                    </p>
+                  </div>
+                  <button
+                    onClick={closeWinnerModal}
+                    className="bg-[#074873] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#053a5c] transition-colors shadow-lg"
+                  >
+                    Close
+                  </button>
                 </div>
-                <button
-                  onClick={closeWinnerModal}
-                  className="bg-[#074873] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#053a5c] transition-colors shadow-lg"
-                >
-                  Close
-                </button>
-              </div>
             </div>
           </div>
         )}
