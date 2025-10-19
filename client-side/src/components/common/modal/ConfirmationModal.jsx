@@ -89,6 +89,8 @@ function ConfirmationModal({ confirmType, onConfirm, onCancel, type }) {
               ? " this event"
               : confirmTypeWord === "change"
               ? " this fee"
+              : confirmTypeWord === "create"
+              ? " this promo"
               : " this student"}
             ?
           </p>

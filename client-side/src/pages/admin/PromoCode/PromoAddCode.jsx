@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { activePublishMerchandise } from "../../../api/admin";
+import ConfirmationModal from "../../../components/common/modal/ConfirmationModal";
+import { ConfirmActionType } from "../../../enums/commonEnums";
 
 const PromoAddCode = ({ onCancel }) => {
   const [type, setType] = useState("");
@@ -14,6 +16,7 @@ const PromoAddCode = ({ onCancel }) => {
   const [quantity, setQuantity] = useState(0);
   const [activeMerchandise, setActiveMerchandise] = useState([]);
   const [discount, setDiscount] = useState(0);
+  const [confirmModal, setConfirmModal] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -52,6 +55,8 @@ const PromoAddCode = ({ onCancel }) => {
     Object.entries(formFields).forEach(([key, value]) => {
       promoFormData.append(key, value);
     });
+
+    setConfirmModal(false);
 
     console.log(selectedMerchandise);
 
@@ -276,12 +281,21 @@ const PromoAddCode = ({ onCancel }) => {
           </button>
           <button
             className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => handleCreatePromoCode()}
+            onClick={() => setConfirmModal(true)}
           >
             Create Promo Code
           </button>
         </div>
       </div>
+      {confirmModal && (
+        <>
+          <ConfirmationModal
+            confirmType={ConfirmActionType.CREATE}
+            onConfirm={() => handleCreatePromoCode()}
+            onCancel={() => setConfirmModal(false)}
+          />
+        </>
+      )}
     </div>
   );
 };

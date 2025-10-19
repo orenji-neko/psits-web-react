@@ -208,7 +208,7 @@ router.get("/get-membership-price", both_authenticate, getMembershipPrice);
 router.put(
   "/change-membership-price",
   admin_authenticate,
-
+  role_authenticate(["finance", "admin"]),
   changeMembershipPrice
 );
 
