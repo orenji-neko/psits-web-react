@@ -20,11 +20,39 @@ export const createPromoCode = async (data) => {
     );
 
     if (response.status === 200) {
-        showToast("success", response.data.message);
-        return true;
+      showToast("success", response.data.message);
+      return true;
     } else {
-        showToast("error", response.data.message);
-        return false;
+      showToast("error", response.data.message);
+      return false;
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      showToast("error", error.response.data.message || "An error occurred");
+    } else {
+      showToast("error", "An error occurred");
+    }
+    console.error("Error:", error);
+  }
+};
+
+export const getAllPromoCode = async () => {
+  try {
+    const response = await axios.get(
+      `${backendConnection()}/api/promo/fetch`,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data.promo;
+    } else {
+      return response.data.message;
     }
   } catch (error) {
     if (error.response && error.response.data) {

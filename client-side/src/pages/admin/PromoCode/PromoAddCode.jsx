@@ -62,7 +62,7 @@ const PromoAddCode = ({ onCancel }) => {
     });
 
     if (createPromoCode(promoFormData)) {
-      onCancel;
+      onCancel();
       setConfirmModal(false);
     }
 

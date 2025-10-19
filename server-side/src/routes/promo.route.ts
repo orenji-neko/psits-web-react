@@ -4,7 +4,10 @@ import {
   role_authenticate,
   both_authenticate,
 } from "../middlewares/custom_authenticate_token";
-import { createPromoCode } from "../controllers/promo.controller";
+import {
+  createPromoCode,
+  getAllPromoCode,
+} from "../controllers/promo.controller";
 const router = Router();
 
 router.post(
@@ -13,6 +16,6 @@ router.post(
   role_authenticate(["finance", "admin"]),
   createPromoCode
 );
-router.get("/fetch", both_authenticate);
+router.get("/fetch", both_authenticate, getAllPromoCode);
 
 export default router;

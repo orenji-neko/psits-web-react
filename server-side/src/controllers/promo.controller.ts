@@ -58,3 +58,17 @@ export const createPromoCode = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error! " + error });
   }
 };
+
+export const getAllPromoCode = async (req: Request, res: Response) => {
+  try {
+    const promo = await Promo.find();
+
+    if (!promo) {
+      res.status(404).json({ message: "No Promo Codes" });
+    }
+    res.status(200).json({ promo });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error! " + error });
+  }
+};
