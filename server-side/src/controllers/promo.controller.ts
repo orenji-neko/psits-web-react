@@ -19,6 +19,7 @@ export const createPromoCode = async (req: Request, res: Response) => {
 
   try {
     const parsedMerchandise = JSON.parse(req.body.selectedMerchandise);
+    const parsedAudience = JSON.parse(req.body.selectedAudience);
     if (
       !promoName ||
       !type ||
@@ -48,7 +49,8 @@ export const createPromoCode = async (req: Request, res: Response) => {
       start_date: startDate,
       end_date: endDate,
       selected_merchandise: uniqueMerchandise,
-      selected_audience: selectedAudience,
+      selected_audience: type === "Members" ? parsedAudience : [],
+      selected_specific_students: type == "Students" ? parsedAudience : [],
       quantity,
     });
     await newPromoCode.save();

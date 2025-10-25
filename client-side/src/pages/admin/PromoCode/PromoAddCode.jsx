@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { activePublishMerchandise } from "../../../api/admin";
+import { activePublishMerchandise, fetchStudentName } from "../../../api/admin";
 import ConfirmationModal from "../../../components/common/modal/ConfirmationModal";
 import { ConfirmActionType } from "../../../enums/commonEnums";
 import { createPromoCode } from "../../../api/promo";
+import { showToast } from "../../../utils/alertHelper";
 
 const PromoAddCode = ({ onCancel }) => {
   const [type, setType] = useState("");
@@ -18,15 +19,56 @@ const PromoAddCode = ({ onCancel }) => {
   const [activeMerchandise, setActiveMerchandise] = useState([]);
   const [discount, setDiscount] = useState(0);
   const [confirmModal, setConfirmModal] = useState(false);
+  const [searchStudentId, setSearchStudentId] = useState("");
+  const [handleSearch, setHandleSearch] = useState(false);
+  const [studentSearched, setStudentSearched] = useState([]);
+  const [errorName, setErrorName] = useState("");
 
   const fetchData = async () => {
     try {
       const data = await activePublishMerchandise();
+
       setActiveMerchandise(data ? data : []);
       console.log(data);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleSearchStudent = async () => {
+    try {
+      const data = await fetchStudentName(searchStudentId);
+      if (data === undefined) {
+        return showToast("error", "No Student Found!");
+      }
+      setStudentSearched(data ? data : []);
+      console.log(data);
+      setErrorName("Not Found");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleAddStudent = () => {
+    try {
+      if (studentSearched.data === undefined) {
+        return showToast("error", "No data!");
+      }
+      setSelectedStudents((prev) => {
+        if (prev.includes(studentSearched.data.id_number)) {
+          setErrorName("Student already added");
+          setSearchStudentId("");
+          return prev;
+        }
+        setSearchStudentId("");
+        setStudentSearched([]);
+
+        return [...prev, studentSearched.data.id_number];
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    showToast("success", "Student Added!");
   };
 
   useEffect(() => {
@@ -54,7 +96,7 @@ const PromoAddCode = ({ onCancel }) => {
     };
 
     Object.entries(formFields).forEach(([key, value]) => {
-      if (key === "selectedMerchandise") {
+      if (key === "selectedMerchandise" || key === "selectedAudience") {
         promoFormData.append(key, JSON.stringify(value));
       } else {
         promoFormData.append(key, value);
@@ -71,11 +113,6 @@ const PromoAddCode = ({ onCancel }) => {
     for (let [key, value] of promoFormData.entries()) {
       console.log(`${key}:`, value);
     }
-  };
-
-  const handleStudentChange = (e) => {
-    const values = e.target.value.split(",").map((v) => v.trim());
-    setSelectedStudents(values);
   };
 
   const handleOrgChange = (org) => {
@@ -149,13 +186,55 @@ const PromoAddCode = ({ onCancel }) => {
         {studentType === "Specific" && (
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
-              Student IDs (comma separated)
+              Search Student by ID
             </label>
+            <div className="flex flex-row gap-3 mb-4">
+              <input
+                type="number"
+                placeholder="e.g. 2021001"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+                value={searchStudentId}
+                onChange={(e) => setSearchStudentId(e.target.value)}
+              />
+              <button
+                className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                onClick={() => handleSearchStudent()}
+              >
+                Search
+              </button>
+              {studentSearched.data !== undefined && (
+                <>
+                  <button
+                    className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
+                    onClick={() => handleAddStudent()}
+                  >
+                    Add
+                  </button>
+                </>
+              )}
+            </div>
+            {studentSearched.data !== undefined && (
+              <>
+                {studentSearched.data ? (
+                  <span>
+                    Found: {studentSearched.data.name} | ID:{" "}
+                    {studentSearched.data.id_number}
+                  </span>
+                ) : studentSearched.length > 0 ? (
+                  <span style={{ color: "red" }}>
+                    {errorName ? errorName : "Not Found"}
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+
             <input
               type="text"
-              placeholder="e.g. 2021001, 2021023"
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
-              onChange={handleStudentChange}
+              value={selectedStudents}
+              disabled
             />
           </div>
         )}

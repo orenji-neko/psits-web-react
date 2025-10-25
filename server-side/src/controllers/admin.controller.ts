@@ -16,7 +16,7 @@ import { IStudent } from "../models/student.interface";
 import { IHistory } from "../models/history.interface";
 import { IOrders } from "../models/orders.interface";
 import { IAdmin, IAdminDocument } from "../models/admin.interface";
-import { ISettings } from "../models/settings.interface";
+import { user_model } from "../model_template/model_data";
 
 export const getSearchStudentByIdController = async (
   req: Request,
@@ -33,7 +33,7 @@ export const getSearchStudentByIdController = async (
         message: "Student not found!",
       });
     } else {
-      res.status(200).json({ data: student });
+      res.status(200).json({ data: user_model(student) });
     }
   } catch (error) {
     console.error(error);

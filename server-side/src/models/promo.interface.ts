@@ -2,16 +2,32 @@ import { Types } from "mongoose";
 export interface ISelectMerchandise {
   _id: Types.ObjectId;
   name: string;
+  items: IItemsAvail[];
+}
+
+export interface IItemsAvail {
+  _id: Types.ObjectId;
+  id_number: string;
+  promo_used: Date;
+}
+
+export interface ISelectedSpecificStudent {
+  id_number: string;
+}
+export interface ISelectedAudience {
+  role: string;
 }
 
 export interface IPromo {
   promo_name: string;
   type: string;
   limit_type: string;
-  selected_audience: string;
+  selected_audience: String[];
+  selected_specific_students: String[];
   discount: number;
   quantity: number;
   start_date: Date;
   end_date: Date;
+  status: string;
   selected_merchandise: ISelectMerchandise[];
 }
