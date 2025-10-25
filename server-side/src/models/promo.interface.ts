@@ -11,13 +11,6 @@ export interface IItemsAvail {
   promo_used: Date;
 }
 
-export interface ISelectedSpecificStudent {
-  id_number: string;
-}
-export interface ISelectedAudience {
-  role: string;
-}
-
 export interface IPromo {
   promo_name: string;
   type: string;

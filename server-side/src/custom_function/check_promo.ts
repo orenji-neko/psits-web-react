@@ -10,26 +10,43 @@ export const checkPromos = async () => {
     });
 
     if (!invalidPromos.length) {
-      console.log("No invalid promos found.");
-      return [];
+      console.log("✅ No invalid promos found.");
+      return;
     }
 
-    const invalidPromoIds = invalidPromos.map((p) => p._id);
+    for (const promo of invalidPromos) {
+      const relatedOrders = await Orders.find({
+        "promo._id": promo._id,
+        order_status: "Pending",
+      });
 
-    const result = await Orders.deleteMany({
-      "promo._id": { $in: invalidPromoIds },
-    });
+      if (relatedOrders.length > 0) {
+        const result = await Orders.deleteMany({
+          "promo._id": promo._id,
+          order_status: "Pending",
+        });
 
-    console.log(
-      ` Removed ${result.deletedCount} orders referencing invalid promos.`
-    );
+        const newQuantity = promo.quantity + result.deletedCount;
 
-    return {
-      invalidPromos,
-      deletedOrders: result.deletedCount,
-    };
+        await Promo.findByIdAndUpdate(promo._id, {
+          $set: { quantity: newQuantity },
+        });
+
+        console.log(
+          `🗑️ Deleted ${result.deletedCount} pending orders using expired promo "${promo.promo_name}".`
+        );
+        console.log(
+          `♻️ Restocked "${promo.promo_name}" to quantity: ${newQuantity}`
+        );
+      } else {
+        console.log(
+          `⚠️ No pending orders found using promo "${promo.promo_name}".`
+        );
+      }
+    }
+
+    console.log("🎯 Promo check and restock completed.");
   } catch (error) {
-    console.error("Error checking/removing promos in orders:", error);
-    throw error;
+    console.error("❌ Error during promo cleanup:", error);
   }
 };

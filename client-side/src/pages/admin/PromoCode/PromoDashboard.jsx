@@ -2,9 +2,10 @@ import TableComponent from "../../../components/Custom/TableComponent";
 import ButtonsComponent from "../../../components/Custom/ButtonsComponent";
 import { motion } from "framer-motion";
 import PromoAddCode from "./PromoAddCode";
+import PromoView from "./PromoView";
 import React from "react";
 import { getAllPromoCode, deletePromo } from "../../../api/promo";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaEye } from "react-icons/fa";
 import ConfirmationModal from "../../../components/common/modal/ConfirmationModal";
 import { ConfirmActionType } from "../../../enums/commonEnums";
 const PromoDashboard = () => {
@@ -12,7 +13,9 @@ const PromoDashboard = () => {
   const [promoCodes, setAllPromoCodes] = React.useState([]);
   const [isDelete, setIsDelete] = React.useState(false);
   const [deleteId, setDeleteId] = React.useState("");
-
+  const [isShow, setIsShow] = React.useState(false);
+  const [promoData, setPromoData] = React.useState({});
+  const current = new Date();
   const fetchAllPromoCodes = async () => {
     try {
       const data = await getAllPromoCode();
@@ -26,6 +29,11 @@ const PromoDashboard = () => {
   const handleDelete = (id) => {
     setDeleteId(id);
     setIsDelete(true);
+  };
+
+  const handleView = (data) => {
+    setPromoData(data);
+    setIsShow(true);
   };
 
   const handleDeletion = async () => {
@@ -79,14 +87,40 @@ const PromoDashboard = () => {
       ),
     },
     {
-      key: "quantity",
-      label: "Quantity",
+      key: "status",
+      label: "Status",
+      cell: (row) => (
+        <div
+          className={`inline-block px-3 py-1 rounded-full font-semibold text-sm ${
+            current >= new Date(row.start_date) &&
+            current <= new Date(row.end_date)
+              ? "bg-green-100 text-green-800"
+              : current < new Date(row.start_date)
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {current >= new Date(row.start_date) &&
+          current <= new Date(row.end_date)
+            ? "Active"
+            : current < new Date(row.start_date)
+            ? "Upcoming"
+            : "Expired"}
+        </div>
+      ),
     },
+
     {
       key: "actions",
       label: "",
       cell: (row) => (
         <ButtonsComponent>
+          <button
+            onClick={() => handleView(row)}
+            className="ml-2 text-blue-500 hover:text-blue-700 transition-colors duration-200"
+          >
+            <FaEye />
+          </button>
           <button
             onClick={() => handleDelete(row._id)}
             className="ml-2 text-red-500 hover:text-red-700 transition-colors duration-200"
@@ -126,6 +160,11 @@ const PromoDashboard = () => {
             onCancel={() => setIsDelete(false)}
             onConfirm={() => handleDeletion()}
           />
+        </>
+      )}
+      {isShow && (
+        <>
+          <PromoView data={promoData} onClose={() => setIsShow(false)} />
         </>
       )}
     </>
