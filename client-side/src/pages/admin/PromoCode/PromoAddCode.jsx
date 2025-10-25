@@ -85,7 +85,7 @@ const PromoAddCode = ({ onCancel }) => {
         : "All Students";
     const formFields = {
       promoName,
-      type,
+      type: type === "Members" ? type : studentType,
       limitType,
       selectedAudience,
       discount,

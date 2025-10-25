@@ -11,6 +11,8 @@ import { getOrder } from "../../api/orders";
 import { addToCartApi, viewCart } from "../../api/students";
 import ImagePreview from "../../components/Image/ImagePreview";
 import { showToast } from "../../utils/alertHelper";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { verifyPromo } from "../../api/promo";
 
 import ImageGallery from "../../components/Image/ImageGallery";
 
@@ -93,6 +95,8 @@ const ProductDetail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const user = getInformationData();
   const [price, setPrice] = useState(product.price || 0);
+  const [promoDiscount, setPromoDiscount] = useState(0);
+  const [promoVerified, setPromoVerified] = useState(false);
   const {
     _id = "",
     imageUrl = [],
@@ -107,6 +111,25 @@ const ProductDetail = () => {
     batch = "",
     type = "",
   } = product;
+
+  const [code, setCode] = useState("");
+  const [isVerified, setIsVerified] = useState(null);
+
+  const handleVerify = async () => {
+    try {
+      const data = await verifyPromo(code, _id);
+      console.log(data);
+      if (data) {
+        setIsVerified(true);
+        setPromoDiscount(data.discount / 100);
+        setPromoVerified(true);
+      } else {
+        setIsVerified(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -156,8 +179,18 @@ const ProductDetail = () => {
 
   const discount = statusVerify() ? price - price * 0.05 : price;
 
-  const calculateTotal = () => {
+  const calculateAllTotal = () => {
     return discount * quantity;
+  };
+
+  const calculateTotal = () => {
+    return promoVerified
+      ? calculateAllTotal() - calculateAllTotal() * promoDiscount
+      : calculateAllTotal();
+  };
+
+  const calculatePromoDiscount = () => {
+    return calculateAllTotal() * promoDiscount;
   };
 
   const calculateDiscount = () => {
@@ -421,26 +454,52 @@ const ProductDetail = () => {
                 </div>
               )}
             </div>
+            <div className="flex items-center gap-2 py-5">
+              <input
+                type="text"
+                placeholder="Enter code"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={() => handleVerify()}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+              >
+                Verify
+              </button>
 
-            <div className="mb-10 sm:mb-6 relative flexitems-center">
-              <span className="mr-2 text-xs sm:text-sm font-medium text-gray-700">
-                Quantity:
-              </span>
-              <button
-                className="border text-xs sm:text-sm rounded-full px-4 py-2 mr-2 bg-gray-100 text-gray-700"
-                onClick={decreaseQuantity}
-                disabled={product.control === "limited-purchase"}
-              >
-                -
-              </button>
-              <span className="text-lg font-semibold">{quantity}</span>
-              <button
-                className="border text-xs sm:text-sm rounded-full px-4 py-2 ml-2 bg-gray-100 text-gray-700"
-                onClick={increaseQuantity}
-                disabled={product.control === "limited-purchase"}
-              >
-                +
-              </button>
+              {isVerified === true && (
+                <FaCheckCircle className="text-green-500 text-xl" />
+              )}
+              {isVerified === false && (
+                <FaTimesCircle className="text-red-500 text-xl" />
+              )}
+            </div>
+
+            <div className="mb-10 sm:mb-6 relative flexitems-center pt-6">
+              {!control.toLowerCase().includes("limited") && (
+                <>
+                  <span className="mr-2 text-xs sm:text-sm font-medium text-gray-700">
+                    Quantity:
+                  </span>
+                  <button
+                    className="border text-xs sm:text-sm rounded-full px-4 py-2 mr-2 bg-gray-100 text-gray-700"
+                    onClick={decreaseQuantity}
+                    disabled={product.control === "limited-purchase"}
+                  >
+                    -
+                  </button>
+                  <span className="text-lg font-semibold">{quantity}</span>
+                  <button
+                    className="border text-xs sm:text-sm rounded-full px-4 py-2 ml-2 bg-gray-100 text-gray-700"
+                    onClick={increaseQuantity}
+                    disabled={product.control === "limited-purchase"}
+                  >
+                    +
+                  </button>
+                </>
+              )}
 
               {control.toLowerCase().includes("limited") && (
                 <div className="absolute -bottom-5 sm:bottom-2 sm:left-48  text-red-500 text-xs sm:text-sm font-medium">
@@ -597,6 +656,16 @@ const ProductDetail = () => {
                     : "Not Eligible"}
                 </span>
               </div>
+              {promoVerified && (
+                <>
+                  <div className="flex items-center font-secondary justify-between gap-10">
+                    <span className="font-medium text-lg">Promo Discount:</span>
+                    <span className="text-lg">
+                      {calculatePromoDiscount().toFixed(2)}
+                    </span>
+                  </div>
+                </>
+              )}
               <div className="flex items-center font-secondary justify-between gap-10">
                 <span className="font-medium text-lg">Total:</span>
                 <span className="text-lg">₱ {calculateTotal().toFixed(2)}</span>

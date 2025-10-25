@@ -95,3 +95,52 @@ export const deletePromo = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error! " + error.message });
   }
 };
+export const verifyPromo = async (req: Request, res: Response) => {
+  try {
+    const { promo_code, merchId } = req.params;
+    const student = req.student;
+    const currentDate = new Date();
+
+    const promo = await Promo.findOne({ promo_name: promo_code });
+    if (!promo) return res.status(404).json({ message: "Promo not found" });
+
+    if (currentDate < promo.start_date || currentDate > promo.end_date) {
+      return res.status(400).json({ message: "Expired Promo Code" });
+    }
+
+    const isIncluded = promo.selected_merchandise.some(
+      (item) => item._id.toString() === merchId
+    );
+    if (!isIncluded) {
+      return res.status(403).json({ message: "Merchandise not eligible" });
+    }
+
+    switch (promo.type) {
+      case "All Students":
+        return res
+          .status(200)
+          .json({ discount: promo.discount, message: "Verified Promo" });
+
+      case "Members":
+        if (promo.selected_audience.includes(student.role)) {
+          return res
+            .status(200)
+            .json({ discount: promo.discount, message: "Verified Promo" });
+        }
+        break;
+
+      case "Specific":
+        if (promo.selected_specific_students.includes(student.id_number)) {
+          return res
+            .status(200)
+            .json({ discount: promo.discount, message: "Verified Promo" });
+        }
+        break;
+    }
+
+    res.status(403).json({ message: "Not Eligible" });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
