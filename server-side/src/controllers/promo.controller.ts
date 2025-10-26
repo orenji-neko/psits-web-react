@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import mongoose, { Types } from "mongoose";
 import { Promo } from "../models/promo.model";
-import { IPromo } from "../models/promo.interface";
+import { PromoLog } from "../models/promo.log.model";
+
 import { promoCodeGenerator } from "../custom_function/promo_code_generator";
 
 export const createPromoCode = async (req: Request, res: Response) => {
@@ -53,6 +54,7 @@ export const createPromoCode = async (req: Request, res: Response) => {
       selected_audience: type === "Members" ? parsedAudience : [],
       selected_specific_students: type == "Students" ? parsedAudience : [],
       quantity,
+      created_by: req.admin.name,
     });
     await newPromoCode.save();
     res.status(200).json({ message: "Successfully created Promo Code!" });
@@ -64,7 +66,7 @@ export const createPromoCode = async (req: Request, res: Response) => {
 
 export const getAllPromoCode = async (req: Request, res: Response) => {
   try {
-    const promo = await Promo.find();
+    const promo = await Promo.find({ status: "Active" });
 
     if (!promo) {
       res.status(404).json({ message: "No Promo Codes" });
@@ -164,5 +166,19 @@ export const verifyPromo = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+export const getPromoLog = async (req: Request, res: Response) => {
+  try {
+    const log = await PromoLog.find().sort({ date: -1 });
+
+    if (!log) {
+      res.status(404).json({ message: "No Promo Log" });
+    }
+    res.status(200).json({ log });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error! " + error });
   }
 };

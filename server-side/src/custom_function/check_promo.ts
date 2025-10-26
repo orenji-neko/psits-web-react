@@ -1,5 +1,6 @@
 import { Promo } from "../models/promo.model";
 import { Orders } from "../models/orders.model";
+import { PromoLog } from "../models/promo.log.model";
 
 export const checkPromos = async () => {
   try {
@@ -11,6 +12,7 @@ export const checkPromos = async () => {
 
     if (!invalidPromos.length) {
       console.log("✅ No invalid promos found.");
+      await PromoLog.create({ description: "No invalid promos found." });
       return;
     }
 
@@ -32,21 +34,26 @@ export const checkPromos = async () => {
           $set: { quantity: newQuantity },
         });
 
-        console.log(
-          `🗑️ Deleted ${result.deletedCount} pending orders using expired promo "${promo.promo_name}".`
-        );
-        console.log(
-          `♻️ Restocked "${promo.promo_name}" to quantity: ${newQuantity}`
-        );
+        const message = `🗑️ Deleted ${result.deletedCount} pending orders using expired promo "${promo.promo_name}". ♻️ Restocked to quantity: ${newQuantity}`;
+        console.log(message);
+
+        await PromoLog.create({ description: message });
       } else {
-        console.log(
-          `⚠️ No pending orders found using promo "${promo.promo_name}".`
-        );
+        const message = `⚠️ No pending orders found using promo "${promo.promo_name}".`;
+        console.log(message);
+
+        await PromoLog.create({ description: message });
       }
     }
 
     console.log("🎯 Promo check and restock completed.");
+    await PromoLog.create({
+      description: "Promo check and restock completed.",
+    });
   } catch (error) {
     console.error("❌ Error during promo cleanup:", error);
+    await PromoLog.create({
+      description: `Error during promo cleanup: ${error}`,
+    });
   }
 };

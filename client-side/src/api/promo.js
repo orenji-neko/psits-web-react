@@ -123,3 +123,31 @@ export const deletePromo = async (id) => {
     console.error("Error:", error);
   }
 };
+
+export const getPromoLog = async () => {
+  try {
+    const response = await axios.get(
+      `${backendConnection()}/api/promo/log`,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data.log;
+    } else {
+      return response.data.message;
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      showToast("error", error.response.data.message || "An error occurred");
+    } else {
+      showToast("error", "An error occurred");
+    }
+    console.error("Error:", error);
+  }
+};

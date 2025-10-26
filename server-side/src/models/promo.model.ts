@@ -83,6 +83,9 @@ const promoSchema = new Schema<IPromoDocument>({
     type: String,
     default: "Active",
   },
+  created_by: {
+    type: String,
+  },
 });
 
 export const Promo = mongoose.model<IPromoDocument>("Promo", promoSchema);

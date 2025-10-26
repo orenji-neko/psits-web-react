@@ -24,4 +24,5 @@ export interface IPromo {
   end_date: Date;
   status: string;
   selected_merchandise: ISelectMerchandise[];
+  created_by: string;
 }

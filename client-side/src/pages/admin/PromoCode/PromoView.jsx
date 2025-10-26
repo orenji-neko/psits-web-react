@@ -93,15 +93,20 @@ const PromoView = ({ data, onClose }) => {
                 <p className="font-medium">End Date</p>
                 <p>{formatDate(data.end_date)}</p>
               </div>
+
               <div>
-                <p className="font-medium">Status</p>
+                <p className="font-medium">Promo Status</p>
                 <p
                   className={`font-semibold ${
-                    isActive ? "text-green-600" : "text-red-500"
+                    data.status === "Active" ? "text-green-600" : "text-red-500"
                   }`}
                 >
-                  {isActive ? "Active" : "Expired"}
+                  {data.status === "Active" ? "Active" : "Expired"}
                 </p>
+              </div>
+              <div>
+                <p className="font-medium">Created By</p>
+                <p>{data.created_by ? data.created_by : "N/A"}</p>
               </div>
             </div>
 

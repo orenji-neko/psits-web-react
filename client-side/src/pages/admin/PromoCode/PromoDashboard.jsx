@@ -3,6 +3,8 @@ import ButtonsComponent from "../../../components/Custom/ButtonsComponent";
 import { motion } from "framer-motion";
 import PromoAddCode from "./PromoAddCode";
 import PromoView from "./PromoView";
+import PromoLog from "./PromoLog";
+
 import React from "react";
 import { getAllPromoCode, deletePromo } from "../../../api/promo";
 import { FaTrash, FaEye } from "react-icons/fa";
@@ -15,7 +17,9 @@ const PromoDashboard = () => {
   const [deleteId, setDeleteId] = React.useState("");
   const [isShow, setIsShow] = React.useState(false);
   const [promoData, setPromoData] = React.useState({});
+  const [isPromoLog, setIsPromoLog] = React.useState(false);
   const current = new Date();
+
   const fetchAllPromoCodes = async () => {
     try {
       const data = await getAllPromoCode();
@@ -34,6 +38,10 @@ const PromoDashboard = () => {
   const handleView = (data) => {
     setPromoData(data);
     setIsShow(true);
+  };
+  const handleCloseAdd = () => {
+    setIsShow(false);
+    fetchAllPromoCodes();
   };
 
   const handleDeletion = async () => {
@@ -57,6 +65,9 @@ const PromoDashboard = () => {
 
   const handleViewAddModal = () => {
     setAddModal(true);
+  };
+  const handleViewLogsModal = () => {
+    setIsPromoLog(true);
   };
 
   const columns = [
@@ -134,8 +145,6 @@ const PromoDashboard = () => {
 
   return (
     <>
-      <div>This is Promo Dashboard</div>
-
       <div>
         <div className="p-2 mb-5">
           <ButtonsComponent>
@@ -147,6 +156,15 @@ const PromoDashboard = () => {
             >
               <i className="fas fa-plus text-white"></i>
               <span className="font-medium">Add Promo Code</span>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05, backgroundColor: "#1f2937" }}
+              whileTap={{ scale: 0.98, backgroundColor: "#111827" }}
+              className="text-sm md:text-base bg-gray-700 text-white flex items-center gap-2 px-5 py-2 border border-gray-500 rounded-lg shadow-sm hover:shadow-md transition ease-in-out duration-150 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              onClick={() => handleViewLogsModal()}
+            >
+              <i className="fas fa-file-alt text-white"></i>
+              <span className="font-medium">Cleanup Log</span>
             </motion.button>
           </ButtonsComponent>
         </div>
@@ -164,7 +182,12 @@ const PromoDashboard = () => {
       )}
       {isShow && (
         <>
-          <PromoView data={promoData} onClose={() => setIsShow(false)} />
+          <PromoView data={promoData} onClose={() => handleCloseAdd()} />
+        </>
+      )}
+      {isPromoLog && (
+        <>
+          <PromoLog isOpen={isPromoLog} onClose={() => setIsPromoLog(false)} />
         </>
       )}
     </>

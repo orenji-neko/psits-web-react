@@ -9,6 +9,7 @@ import {
   getAllPromoCode,
   deletePromo,
   verifyPromo,
+  getPromoLog,
 } from "../controllers/promo.controller";
 const router = Router();
 
@@ -19,7 +20,13 @@ router.post(
   createPromoCode
 );
 router.get("/fetch", both_authenticate, getAllPromoCode);
-router.delete("/delete/:id", admin_authenticate, deletePromo);
+router.delete(
+  "/delete/:id",
+  admin_authenticate,
+  role_authenticate(["admin", "finance"]),
+  deletePromo
+);
 router.get("/verify/:promo_code/:merchId", both_authenticate, verifyPromo);
+router.get("/log", admin_authenticate, getPromoLog);
 
 export default router;
