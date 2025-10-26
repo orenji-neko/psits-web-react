@@ -63,6 +63,73 @@ export const createPromoCode = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error! " + error });
   }
 };
+export const updatePromoCode = async (req: Request, res: Response) => {
+  const {
+    promoId,
+    promoName,
+    type,
+    limitType,
+    singleStudent,
+    discount,
+    quantity,
+    startDate,
+    endDate,
+    selectedMerchandise,
+    selectedAudience,
+  } = req.body;
+
+  try {
+    const parsedMerchandise = JSON.parse(selectedMerchandise);
+    const parsedAudience = selectedAudience ? JSON.parse(selectedAudience) : [];
+
+    if (
+      !promoName ||
+      !type ||
+      !limitType ||
+      discount === undefined ||
+      !startDate ||
+      !endDate ||
+      !selectedMerchandise ||
+      !Array.isArray(parsedMerchandise) ||
+      parsedMerchandise.length === 0
+    ) {
+      return res
+        .status(400)
+        .json({ message: "All required fields must be filled." });
+    }
+
+    const uniqueMerchandise = Array.from(
+      new Map(
+        parsedMerchandise.map((item) => [item._id.toString(), item])
+      ).values()
+    );
+
+    const promo = await Promo.findById(promoId);
+    if (!promo) {
+      return res.status(404).json({ message: "Promo not found!" });
+    }
+
+    promo.promo_name = promoName;
+    promo.type = type;
+    promo.limit_type = limitType;
+    promo.one_person_limit = singleStudent === "yes";
+    promo.discount = discount;
+    promo.start_date = startDate;
+    promo.end_date = endDate;
+    promo.quantity = quantity;
+    promo.selected_merchandise = uniqueMerchandise;
+    promo.selected_audience = type === "Members" ? parsedAudience : [];
+    promo.selected_specific_students =
+      type === "Students" || type === "Specific" ? parsedAudience : [];
+
+    await promo.save();
+
+    res.status(200).json({ message: "Promo Code updated successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error });
+  }
+};
 
 export const getAllPromoCode = async (req: Request, res: Response) => {
   try {

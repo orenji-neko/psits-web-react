@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import PromoAddCode from "./PromoAddCode";
 import PromoView from "./PromoView";
 import PromoLog from "./PromoLog";
-
+import PromoEdit from "./PromoEdit";
 import React from "react";
 import { getAllPromoCode, deletePromo } from "../../../api/promo";
-import { FaTrash, FaEye } from "react-icons/fa";
+import { FaTrash, FaEye, FaPen } from "react-icons/fa";
 import ConfirmationModal from "../../../components/common/modal/ConfirmationModal";
 import { ConfirmActionType } from "../../../enums/commonEnums";
 const PromoDashboard = () => {
@@ -18,6 +18,8 @@ const PromoDashboard = () => {
   const [isShow, setIsShow] = React.useState(false);
   const [promoData, setPromoData] = React.useState({});
   const [isPromoLog, setIsPromoLog] = React.useState(false);
+  const [isEdit, setIsEdit] = React.useState(false);
+  const [editData, setEditData] = React.useState({});
   const current = new Date();
 
   const fetchAllPromoCodes = async () => {
@@ -41,6 +43,14 @@ const PromoDashboard = () => {
   };
   const handleCloseAdd = () => {
     setIsShow(false);
+    fetchAllPromoCodes();
+  };
+  const handleEditModal = (data) => {
+    setIsEdit(true);
+    setEditData(data);
+  };
+  const handleCloseEdit = () => {
+    setIsEdit(false);
     fetchAllPromoCodes();
   };
 
@@ -127,6 +137,12 @@ const PromoDashboard = () => {
       cell: (row) => (
         <ButtonsComponent>
           <button
+            onClick={() => handleEditModal(row)}
+            className="ml-2 text-blue-500 hover:text-blue-700 transition-colors duration-200"
+          >
+            <FaPen />
+          </button>
+          <button
             onClick={() => handleView(row)}
             className="ml-2 text-blue-500 hover:text-blue-700 transition-colors duration-200"
           >
@@ -183,6 +199,11 @@ const PromoDashboard = () => {
       {isShow && (
         <>
           <PromoView data={promoData} onClose={() => handleCloseAdd()} />
+        </>
+      )}
+      {isEdit && (
+        <>
+          <PromoEdit data={editData} onCancel={() => handleCloseEdit()} />
         </>
       )}
       {isPromoLog && (

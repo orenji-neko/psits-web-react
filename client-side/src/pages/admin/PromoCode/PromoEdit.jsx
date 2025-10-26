@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 import { activePublishMerchandise, fetchStudentName } from "../../../api/admin";
 import ConfirmationModal from "../../../components/common/modal/ConfirmationModal";
 import { ConfirmActionType } from "../../../enums/commonEnums";
-import { createPromoCode } from "../../../api/promo";
+import { updatePromoCode } from "../../../api/promo";
 import { showToast } from "../../../utils/alertHelper";
 
 const PromoEdit = ({ data, onCancel }) => {
-  const [type, setType] = useState(data.type);
+  console.log(data);
+  const [type, setType] = useState(
+    data.type === "All Students" || data.type === "Specific"
+      ? "Students"
+      : data.type
+  );
   const [promoName, setPromoName] = useState(data.promo_name);
-  const [studentType, setStudentType] = useState(data.student_type);
+  const [studentType, setStudentType] = useState(data.type);
   const [limitType, setLimitType] = useState(data.limit_type);
   const [selectedStudents, setSelectedStudents] = useState(
     data.selected_specific_students
@@ -19,8 +24,14 @@ const PromoEdit = ({ data, onCancel }) => {
   const [selectedMerchandise, setSelectedMerchandise] = useState(
     data.selected_merchandise
   );
-  const [startDate, setStartDate] = useState(data.start_date);
-  const [endDate, setEndDate] = useState(data.end_date);
+  const [startDate, setStartDate] = useState(() => {
+    if (!data?.start_date) return "";
+    return new Date(data.start_date).toISOString().split("T")[0];
+  });
+  const [endDate, setEndDate] = useState(() => {
+    if (!data?.end_date) return "";
+    return new Date(data.end_date).toISOString().split("T")[0];
+  });
   const [quantity, setQuantity] = useState(data.quantity);
   const [activeMerchandise, setActiveMerchandise] = useState([]);
   const [discount, setDiscount] = useState(data.discount);
@@ -79,11 +90,7 @@ const PromoEdit = ({ data, onCancel }) => {
     showToast("success", "Student Added!");
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const handleCreatePromoCode = async () => {
+  const handleUpdatePromoCode = async () => {
     const promoFormData = new FormData();
     const selectedAudience =
       type === "Members"
@@ -92,6 +99,7 @@ const PromoEdit = ({ data, onCancel }) => {
         ? selectedStudents
         : "All Students";
     const formFields = {
+      promoId: data._id,
       promoName,
       type: type === "Members" ? type : studentType,
       limitType,
@@ -112,7 +120,7 @@ const PromoEdit = ({ data, onCancel }) => {
       }
     });
 
-    if (createPromoCode(promoFormData)) {
+    if (updatePromoCode(promoFormData)) {
       onCancel();
       setConfirmModal(false);
     }
@@ -122,6 +130,7 @@ const PromoEdit = ({ data, onCancel }) => {
     for (let [key, value] of promoFormData.entries()) {
       console.log(`${key}:`, value);
     }
+    onCancel();
   };
 
   const handleOrgChange = (org) => {
@@ -131,16 +140,26 @@ const PromoEdit = ({ data, onCancel }) => {
   };
 
   const handleMerchChange = (item) => {
-    setSelectedMerchandise((prev) =>
-      prev.includes(item) ? prev.filter((m) => m !== item) : [...prev, item]
-    );
+    setSelectedMerchandise((prevSelected) => {
+      const isSelected = prevSelected.some((merch) => merch._id === item._id);
+      if (isSelected) {
+        return prevSelected.filter((merch) => merch._id !== item._id);
+      } else {
+        return [...prevSelected, item];
+      }
+    });
   };
+
+  useEffect(() => {
+    fetchData();
+    console.log(data);
+  }, []);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-lg p-6 space-y-4">
         <h2 className="text-xl font-semibold text-gray-800 text-center">
-          Add Promo Code
+          Edit Promo Code
         </h2>
 
         {/* Promo Name */}
@@ -351,10 +370,12 @@ const PromoEdit = ({ data, onCancel }) => {
           </p>
           <div className="grid grid-cols-2 gap-2">
             {activeMerchandise.map((item) => (
-              <label key={item} className="flex items-center gap-2">
+              <label key={item._id} className="flex items-center gap-2">
                 <input
                   type="checkbox"
-                  checked={selectedMerchandise.includes(item)}
+                  checked={selectedMerchandise.some(
+                    (merch) => merch._id === item._id
+                  )}
                   onChange={() => handleMerchChange(item)}
                   className="accent-blue-600"
                 />
@@ -413,18 +434,18 @@ const PromoEdit = ({ data, onCancel }) => {
             Cancel
           </button>
           <button
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+            className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
             onClick={() => setConfirmModal(true)}
           >
-            Create Promo Code
+            Update Promo Code
           </button>
         </div>
       </div>
       {confirmModal && (
         <>
           <ConfirmationModal
-            confirmType={ConfirmActionType.CREATE}
-            onConfirm={() => handleCreatePromoCode()}
+            confirmType={ConfirmActionType.UPDATE}
+            onConfirm={() => handleUpdatePromoCode()}
             onCancel={() => setConfirmModal(false)}
           />
         </>

@@ -69,7 +69,7 @@ const PromoLog = ({ isOpen, onClose }) => {
             </thead>
             <tbody>
               {currentLogs.length > 0 ? (
-                promoLog.map((log, index) => (
+                currentLogs.map((log, index) => (
                   <tr
                     key={log._id}
                     className="hover:bg-gray-50 transition-colors"
