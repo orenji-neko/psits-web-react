@@ -2,78 +2,86 @@ import { getInformationData } from "../../authentication/Authentication";
 
 export const formattedDate = (date) => {
   const dates = new Date(date);
-
-  return dates.toLocaleDateString();
+  if (isNaN(dates.getTime())) {
+    return "Invalid Date";
+  } else {
+    return dates.toLocaleDateString();
+  }
 };
 
-export const conditionalPosition = () => {
-  const user = getInformationData();
+export const handlePrintDataPos = (name) => {
+  const words = name.split(" ");
+  let fullName = "";
 
-  return (
-    user.position === "Treasurer" ||
-    user.position === "Assistant Treasurer" ||
-    user.position === "Auditor" ||
-    user.position === "Head Developer" ||
-    user.position === "President"
-  );
+  for (let i = 0; i < words.length - 1; i++) {
+    fullName += words[i].charAt(0) + ".";
+  }
+  fullName += " " + words[words.length - 1];
+
+  return fullName;
 };
 
-export const higherPosition = () => {
-  const user = getInformationData();
-
-  return (
-    user.position === "President" ||
-    user.position === "Head Developer" ||
-    (user.position === "Developer" && user.campus === "UC-Main")
-  );
-};
-export const mediaPosition = () => {
-  const user = getInformationData();
-
-  return user.position === "P.R.O" && user.campus === "UC-Main";
-};
-export const volunteerPosition = () => {
-  const user = getInformationData();
-
-  return user.position === "Chief Volunteer" && user.campus === "UC-Main";
+export const generateReferenceCode = () => {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let referenceCode = "";
+  for (let i = 0; i < 11; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    referenceCode += characters[randomIndex];
+  }
+  return referenceCode;
 };
 
-export const headDevPosition = () => {
-  const user = getInformationData();
-
-  return user.position === "Head Developer";
-};
-export const presidentPosition = () => {
-  const user = getInformationData();
-
-  return user.position === "President" && user.campus === "UC-Main";
-};
-export const treasurerPosition = () => {
-  const user = getInformationData();
-
-  return user.position === "Treasurer" && user.campus === "UC-Main";
-};
-export const higherOfficers = () => {
-  const user = getInformationData();
-
-  return (
-    (user.position === "President" ||
-      user.position === "Vice-President Internal" ||
-      user.position === "Vice-President External" ||
-      user.position === "Secretary" ||
-      user.position === "Head Developer") &&
-    user.campus === "UC-Main"
-  );
+export const capitalizeWord = (word) => {
+  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 };
 
-export const deletePosition = () => {
-  const user = getInformationData();
+export const formattedLastName = (name) => {
+  const names = name.trim().split(/\s+/);
+  if (names.length < 2) return name;
+  const lastName = names.pop();
+  const firstNames = names.join(" ");
+  return `${lastName}, ${firstNames}`;
+};
 
-  return user.position === "Treasurer" || user.position === "Head Developer";
+export const noneConditionalAccess = () => {
+  const data = getInformationData();
+  return data.access === "none";
+};
+export const standardConditionalAccess = () => {
+  const data = getInformationData();
+  return data.access === "standard" && data.campus === "UC-Main";
+};
+export const financeConditionalAccess = () => {
+  const data = getInformationData();
+  return data.access === "finance" && data.campus === "UC-Main";
+};
+export const executiveConditionalAccess = () => {
+  const data = getInformationData();
+  return data.access === "executive" && data.campus === "UC-Main";
+};
+export const adminConditionalAccess = () => {
+  const data = getInformationData();
+  return data.access === "admin" && data.campus === "UC-Main";
+};
+
+//Dynamic access levels
+export const financeAndAdminConditionalAccess = () => {
+  return financeConditionalAccess() || adminConditionalAccess();
+};
+export const executiveAndAdminConditionalAccess = () => {
+  return executiveConditionalAccess() || adminConditionalAccess();
+};
+
+//Logs access
+export const logsAccess = () => {
+  return financeAndAdminConditionalAccess() || executiveConditionalAccess();
+};
+export const settingsAccess = () => {
+  return financeAndAdminConditionalAccess() || executiveConditionalAccess();
 };
 
 export const restrictedComponent = () => {
-  return ["logs"];
+  return ["logs", "settings"];
 };
 
 export const restrictedComponentOtherCampus = () => {

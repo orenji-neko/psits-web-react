@@ -7,13 +7,12 @@ import Goals from "../components/sections/home/Goals";
 import MissionVision from "../components/sections/home/MissionVision";
 import { removeAuthentication } from "../authentication/Authentication";
 
-
 const Home = () => {
   useEffect(() => {
     // Define an async function inside useEffect
     const logoutAndClearAuth = async () => {
-			removeAuthentication();
-		};
+      removeAuthentication();
+    };
 
     logoutAndClearAuth();
   }, []);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import FormButton from "../../components/forms/FormButton";
@@ -10,10 +10,13 @@ import { getInformationData } from "../../authentication/Authentication";
 import { getOrder } from "../../api/orders";
 import { addToCartApi, viewCart } from "../../api/students";
 import ImagePreview from "../../components/Image/ImagePreview";
-import { format } from "date-fns";
 import { showToast } from "../../utils/alertHelper";
 
 import ImageGallery from "../../components/Image/ImageGallery";
+
+const isObject = (param) => {
+  return param !== null && typeof param === "object" && !Array.isArray(param);
+};
 
 const ButtonGroup = ({ items, selectedItem, onSelect, label, disabled }) => (
   <div className="mb-2 flex-1">
@@ -21,21 +24,42 @@ const ButtonGroup = ({ items, selectedItem, onSelect, label, disabled }) => (
       {label}
     </span>
     <div className="flex flex-wrap gap-2 mt-1">
-      {items.length > 0 ? (
-        items.map((item) => (
+      {isObject(items) && Object.keys(items).length > 0 ? (
+        Object.entries(items).map(([sizeName]) => (
           <button
-            key={item}
-            className={`text-xs sm:text-sm   md:text-md border rounded-full px-3 py-1 md:px-4 md:py-2 focus:outline-none ${
-              selectedItem === item
+            key={sizeName}
+            className={`text-xs sm:text-sm md:text-md border rounded-full px-3 py-1 md:px-4 md:py-2 focus:outline-none ${
+              selectedItem === sizeName
                 ? "bg-blue-600 text-white"
                 : "bg-gray-100 text-gray-700"
             }`}
-            onClick={() => onSelect(item)}
+            onClick={() => onSelect(sizeName)}
             disabled={disabled}
           >
-            {item}
+            {sizeName}
           </button>
         ))
+      ) : items ? (
+        <>
+          {items.length > 0 ? (
+            items.map((item) => (
+              <button
+                key={item}
+                className={`text-xs sm:text-sm   md:text-md border rounded-full px-3 py-1 md:px-4 md:py-2 focus:outline-none ${
+                  selectedItem === item
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 text-gray-700"
+                }`}
+                onClick={() => onSelect(item)}
+                disabled={disabled}
+              >
+                {item}
+              </button>
+            ))
+          ) : (
+            <span className="text-gray-500">No {label}</span>
+          )}
+        </>
       ) : (
         <span className="text-gray-500">No {label}</span>
       )}
@@ -61,16 +85,20 @@ const ProductDetail = () => {
   const [error, setError] = useState(null);
   const [formError, setFormError] = useState("");
   const [cartIndicator, setCartIndicator] = useState(false);
-  const [status, setStatus] = useState({ membership: "", renew: "" });
+  const [status, setStatus] = useState({
+    status: "",
+    isFirstApplication: true,
+  });
   const [cartLimited, setCartLimited] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const user = getInformationData();
+  const [price, setPrice] = useState(product.price || 0);
   const {
     _id = "",
     imageUrl = [],
     name = "",
     description = "",
-    price = 0,
+
     stocks = 0,
     selectedSizes = [],
     selectedVariations = [],
@@ -80,18 +108,16 @@ const ProductDetail = () => {
     type = "",
   } = product;
 
-  if (user.position === "Student") {
-    useEffect(() => {
-      const fetchStatus = async () => {
-        const membershipStatus = await getMembershipStatusStudents(
-          user.id_number
-        );
-
-        setStatus(membershipStatus);
-      };
-      fetchStatus();
-    });
-  }
+  useEffect(() => {
+    const fetchStatus = async () => {
+      const status = await getMembershipStatusStudents(user.id_number);
+      setStatus({
+        status: status.status,
+        isFirstApplication: status.isFirstApplication,
+      });
+    };
+    fetchStatus();
+  }, []);
 
   const [errors, setErrors] = useState({
     selectedSize: "",
@@ -99,10 +125,7 @@ const ProductDetail = () => {
   });
   const statusVerify = () => {
     return (
-      (status.renew === "Accepted" ||
-        (status.membership === "Accepted" &&
-          status.renew !== "None" &&
-          status.renew !== "Pending")) &&
+      (status.status === "ACTIVE" || status.status === "RENEWED") &&
       category === "merchandise"
     );
   };
@@ -110,7 +133,11 @@ const ProductDetail = () => {
   const validate = () => {
     let errors = {};
 
-    if (selectedSizes[0] !== "" && selectedSize === null) {
+    if (
+      selectedSizes[0] !== "" && selectedSize === null && selectedSize
+        ? selectedSize.length > 0
+        : false
+    ) {
       errors.name = "Select size!.";
       showToast("error", "You need to select a size");
     }
@@ -127,15 +154,7 @@ const ProductDetail = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const discount =
-    (status.renew === "Accepted" ||
-      (status.membership === "Accepted" &&
-        status.renew !== "None" &&
-        status.renew !== "Pending")) &&
-    category === "merchandise" &&
-    category !== "uniform"
-      ? price - price * 0.05
-      : price;
+  const discount = statusVerify() ? price - price * 0.05 : price;
 
   const calculateTotal = () => {
     return discount * quantity;
@@ -144,6 +163,11 @@ const ProductDetail = () => {
   const calculateDiscount = () => {
     return price * quantity;
   };
+  useEffect(() => {
+    setPrice(
+      Number.parseInt(selectedSizes[selectedSize]?.price || product.price || 0)
+    );
+  }, [selectedSize]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -222,32 +246,16 @@ const ProductDetail = () => {
     if (validate()) {
       const id_number = user.id_number;
       const product_id = _id;
-      const product_name = name;
       const sizes = selectedSize;
       const variation =
         category === "uniform" ? selectedVariations : selectedColor;
-      const sub_total = price * quantity;
-      const imageUrl1 = imageUrl[0];
-      const limited = product.control === "limited-purchase" ? true : false;
-      const start_date = product.start_date;
-      const end_date = product.end_date;
 
       setFormData({
         id_number,
         product_id,
-        product_name,
-        start_date,
-        end_date,
-        category,
-        price,
         sizes,
         variation,
-        batch,
         quantity,
-        sub_total,
-        imageUrl1,
-        preview,
-        limited,
       });
 
       setShowModal(true);
@@ -258,43 +266,25 @@ const ProductDetail = () => {
     setCartIndicator(false);
     if (validate()) {
       const id_number = user.id_number;
-      const rfid = user.rfid;
+      const rfid = user.rfid ? user.rfid : "N/A";
       const course = user.course;
       const year = user.year;
       const student_name = user.name;
-      const imageUrl1 = imageUrl[0];
-      const total = calculateTotal();
-      const order_date = new Date();
-      const order_status = "Pending";
-      const membership_discount = statusVerify() ? true : false;
 
       const items = {
         product_id: _id,
-        imageUrl1: imageUrl[0],
-        product_name: name,
-        limited: product.control === "limited-purchase" ? true : false,
-        price: price,
-        membership_discount: statusVerify(),
         quantity: quantity,
-        sub_total: calculateTotal(),
         variation: category === "uniform" ? selectedVariations : selectedColor,
         sizes: selectedSize,
-        batch: batch,
       };
 
       setFormData({
         id_number,
         rfid,
-        imageUrl1,
         course,
-        membership_discount,
         year,
         student_name,
         items,
-        total,
-        order_date,
-        order_status,
-        preview,
       });
 
       setShowModal(true);
@@ -382,12 +372,20 @@ const ProductDetail = () => {
             <p className="text-xs text-gray-700 md:text-sm mb-3">
               {description}
             </p>
-            <p className="text-md md:text-lg font-semibold text-gray-900 mb-3">
-              ₱ {price.toFixed(2)}
+            <p className="text-md md:text-lg font-semibold text-gray-900 mb-3 flex items-center space-x-2">
+              {statusVerify() && (
+                <span className="text-red-600 line-through underline underline-offset-4 decoration-red-600">
+                  ₱ {price ? price.toFixed(2) : 0}
+                </span>
+              )}
+              <span>₱ {discount ? discount.toFixed(2) : 0}</span>
             </p>
 
             <p className="text-xs md:text-sm text-gray-500  mb-2 md:mb-4">
               {batch !== "" ? "Batch: " : ""} {batch}
+            </p>
+            <p className="text-xs md:text-sm text-gray-500  mb-2 md:mb-4">
+              {category !== "" ? "Category: " : ""} {category}
             </p>
 
             <p className="text-xs md:text-sm text-gray-500  mb-2 md:mb-4">
@@ -408,16 +406,17 @@ const ProductDetail = () => {
                 type.includes("Item")) && (
                 <div>
                   <ButtonGroup
-                    items={selectedVariations}
+                    items={
+                      selectedVariations[0] === "" ? [] : selectedVariations
+                    }
                     selectedItem={selectedColor}
                     onSelect={setSelectedColor}
                     label="Color"
                     disabled={category === "uniform"}
                   />
                   <p className="text-xs text-red-500">
-                    {type.includes("Uniform")
-                      ? "Color set to White and Purple"
-                      : ""}
+                    {type.includes("Uniform") &&
+                      "Color set to White and Purple"}
                   </p>
                 </div>
               )}
@@ -456,9 +455,8 @@ const ProductDetail = () => {
               </div>
             )}
 
-
             {/* Buy Now Pop Up Details Modal */}
-            
+
             <div className="flex gap-2">
               {!cartLimited && orderId !== _id && (
                 <button
@@ -542,10 +540,10 @@ const ProductDetail = () => {
               <div className="flex items-center font-primary font-semibold justify-between gap-10">
                 <span className="text-2xl">{name}</span>
               </div>
-              {formData.preview && (
+              {preview && (
                 <div className="mb-4 w-full">
                   <img
-                    src={formData.preview}
+                    src={preview}
                     alt="Product Preview"
                     className="w-min h-32 rounded-md"
                   />

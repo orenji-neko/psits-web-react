@@ -8,16 +8,14 @@ import ButtonsComponent from "../../../components/Custom/ButtonsComponent";
 import TableComponent from "../../../components/Custom/TableComponent";
 import ConfirmationModal from "../../../components/common/modal/ConfirmationModal";
 import FormButton from "../../../components/forms/FormButton";
-import {
-  higherPosition,
-  higherOfficers,
-} from "../../../components/tools/clientTools";
+import { executiveAndAdminConditionalAccess } from "../../../components/tools/clientTools";
 import { ConfirmActionType } from "../../../enums/commonEnums";
 import { showToast } from "../../../utils/alertHelper";
 import EditOfficer from "../EditOfficer";
 import { motion } from "framer-motion";
 import React, { useState, useEffect } from "react";
 import AddOfficer from "../AddOfficer";
+import OptionModal from "../../../components/common/modal/OptionModal";
 
 const AllOfficers = () => {
   const [data, setData] = useState([]);
@@ -34,10 +32,13 @@ const AllOfficers = () => {
   const [id, setId] = useState("");
   const [viewChange, setViewChange] = useState(false);
   const [viewAdd, setViewAdd] = useState(false);
+  const [viewOptionModal, setViewOptionModal] = useState(false);
+  const [studentInformation, setStudentInformation] = useState({});
 
   const fetchData = async () => {
     try {
       const result = await getAllOfficers();
+    
       setData(result ? result : []);
       setFilteredData(result ? result : []);
       setLoading(false);
@@ -45,6 +46,26 @@ const AllOfficers = () => {
       console.error("Error fetching data: ", error);
       setLoading(false);
     }
+  };
+
+  const printAction = (action) => {
+    switch (action.toLowerCase()) {
+      case "edit":
+        handleEditButtonClick(studentInformation);
+        break;
+      case "suspend":
+        showModal(studentInformation);
+        break;
+
+      case "change":
+        handleChangePassword(studentInformation.id_number);
+        break;
+    }
+  };
+  const handleOptionModal = (row) => {
+    setStudentInformation(row);
+
+    setViewOptionModal(!viewOptionModal);
   };
 
   const handleEditButtonClick = (row) => {
@@ -68,8 +89,9 @@ const AllOfficers = () => {
   const handleSaveEditedMember = async (updatedMember) => {
     setIsLoading(true);
     try {
-      editOfficerApi(updatedMember);
-      fetchData();
+      if (editOfficerApi(updatedMember)) {
+        fetchData();
+      }
     } catch (error) {
       console.error("Error updating officer:", error);
     }
@@ -104,7 +126,7 @@ const AllOfficers = () => {
 
   const handleConfirmDeletion = async () => {
     setIsLoading(true);
-    // console.log(studentIdToBeDeleted);
+
     try {
       const id_number = studentIdToBeDeleted;
 
@@ -213,39 +235,18 @@ const AllOfficers = () => {
       sortable: true,
     },
 
-    higherOfficers() && {
+    executiveAndAdminConditionalAccess() && {
       key: "actions",
       label: "",
       cell: (row) => (
         <ButtonsComponent>
           <FormButton
+            text="More"
             type="button"
-            text="Change"
-            onClick={() => handleChangePassword(row.id_number)}
-            icon={<i className="fas fa-key" />} // Simple icon
-            styles="flex items-center space-x-2 bg-gray-200 text-gray-800 rounded-md px-3 py-1.5 transition duration-150 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            textClass="text-gray-800"
-            whileHover={{ scale: 1.02, opacity: 0.95 }}
-            whileTap={{ scale: 0.98, opacity: 0.9 }}
-          />
-
-          <FormButton
-            type="button"
-            text="Edit"
-            onClick={() => handleEditButtonClick(row)}
-            icon={<i className="fas fa-edit" />} // Simple icon
+            onClick={() => handleOptionModal(row)}
+            icon={<i className="fas fa-cog" />}
             styles="flex items-center space-x-2 bg-gray-200 text-gray-800 rounded-md px-3 py-1.5 transition duration-150 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
             textClass="text-gray-800" // Elegant text color
-            whileHover={{ scale: 1.02, opacity: 0.95 }}
-            whileTap={{ scale: 0.98, opacity: 0.9 }}
-          />
-          <FormButton
-            type="button"
-            text="Suspend"
-            onClick={() => showModal(row)}
-            icon={<i className="fas fa-trash" />} // Simple icon
-            styles="flex items-center space-x-2 bg-gray-200 text-red-800 rounded-md px-3 py-1.5 transition duration-150 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
-            textClass="text-red-800" // Elegant text color
             whileHover={{ scale: 1.02, opacity: 0.95 }}
             whileTap={{ scale: 0.98, opacity: 0.9 }}
           />
@@ -293,6 +294,18 @@ const AllOfficers = () => {
             position="officer"
           />
         </>
+      )}
+      {viewOptionModal && (
+        <OptionModal
+          onClose={handleOptionModal}
+          onAction={{
+            label: ["Edit", "Suspend", "Change_Password"],
+          }}
+          actionKey={(action) => {
+            printAction(action);
+          }}
+          information={studentInformation}
+        />
       )}
     </div>
   );

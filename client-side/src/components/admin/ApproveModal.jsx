@@ -5,7 +5,6 @@ import ReactToPrint from "react-to-print";
 import Receipt from "../../components/common/Receipt.jsx";
 import { approveMembership } from "../../api/admin.js";
 import { approveOrder } from "../../api/orders.js";
-import { format } from "date-fns";
 
 function ApproveModal({
   reference_code,
@@ -72,7 +71,7 @@ function ApproveModal({
       } else {
         if (type === "Membership" || type === "Renewal") {
           if (await approveMembership(formData)) {
-            showToast("success", "Student Approved");
+            //showToast("success", "Student Approved");
             setShouldPrint(true);
           } else {
             showToast("error", "Internal Server Error!");

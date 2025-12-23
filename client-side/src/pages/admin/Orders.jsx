@@ -11,7 +11,7 @@ import Receipt from "../../components/common/Receipt";
 import ConfirmationModal from "../../components/common/modal/ConfirmationModal";
 import FormButton from "../../components/forms/FormButton";
 import {
-  conditionalPosition,
+  financeAndAdminConditionalAccess,
   formattedDate,
 } from "../../components/tools/clientTools";
 import { ConfirmActionType } from "../../enums/commonEnums";
@@ -21,6 +21,10 @@ import { InfinitySpin } from "react-loader-spinner";
 import Button from "../../components/common/Button";
 import AddOrderModal from "../../components/admin/AddOrderModal";
 import { showToast } from "../../utils/alertHelper";
+import {
+  handlePrintDataPos,
+  generateReferenceCode,
+} from "../../components/tools/clientTools";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -141,16 +145,8 @@ const Orders = () => {
   const handlePrintData = (row) => {
     setPrintData(row);
     setShouldPrint(true);
-    const name = row.student_name;
-    const words = name.split(" ");
-    let fullName = "";
 
-    for (let i = 0; i < words.length - 1; i++) {
-      fullName += words[i].charAt(0) + ".";
-    }
-    fullName += " " + words[words.length - 1];
-
-    setSelectedStudentName(fullName);
+    setSelectedStudentName(handlePrintDataPos(row.student_name));
   };
   useEffect(() => {
     if (rowData) {
@@ -166,16 +162,8 @@ const Orders = () => {
 
   const handleApproveClick = (order) => {
     setSelectedOrder(order);
-    const name = order.student_name;
-    const words = name.split(" ");
-    let fullName = "";
 
-    for (let i = 0; i < words.length - 1; i++) {
-      fullName += words[i].charAt(0) + ".";
-    }
-    fullName += " " + words[words.length - 1];
-
-    setSelectedStudentName(fullName);
+    setSelectedStudentName(handlePrintDataPos(order.student_name));
     setIsModalOpen(true);
   };
   const handleCancelClick = (order) => {
@@ -402,66 +390,66 @@ const Orders = () => {
                               <FormButton
                                 type="button"
                                 text={
-                                  !conditionalPosition()
+                                  !financeAndAdminConditionalAccess()
                                     ? "Not Authorized"
                                     : "Approve"
                                 }
                                 onClick={() => {
-                                  if (conditionalPosition()) {
+                                  if (financeAndAdminConditionalAccess()) {
                                     handleApproveClick(order);
                                   }
                                 }}
                                 icon={
                                   <i
                                     className={`fa ${
-                                      !conditionalPosition()
+                                      !financeAndAdminConditionalAccess()
                                         ? "fa-lock"
                                         : "fa-check"
                                     }`}
                                   ></i>
                                 }
                                 styles={`relative flex items-center justify-center space-x-2 px-3 py-2 rounded text-white ${
-                                  !conditionalPosition()
+                                  !financeAndAdminConditionalAccess()
                                     ? "bg-gray-500 cursor-not-allowed"
                                     : "bg-[#002E48]"
                                 }`}
                                 textClass="text-white text-sm"
                                 whileHover={{ scale: 1.02, opacity: 0.95 }}
                                 whileTap={{ scale: 0.98, opacity: 0.9 }}
-                                disabled={!conditionalPosition()}
+                                disabled={!financeAndAdminConditionalAccess()}
                               />
                             </ButtonsComponent>
                             <ButtonsComponent>
                               <FormButton
                                 type="button"
                                 text={
-                                  !conditionalPosition()
+                                  !financeAndAdminConditionalAccess()
                                     ? "Not Authorized"
                                     : "Cancel"
                                 }
                                 onClick={() => {
-                                  if (conditionalPosition()) {
+                                  if (financeAndAdminConditionalAccess()) {
                                     handleCancelClick(order);
                                   }
                                 }}
                                 icon={
                                   <i
                                     className={`fa ${
-                                      !conditionalPosition()
+                                      !financeAndAdminConditionalAccess()
                                         ? "fa-lock"
                                         : "fa-times"
                                     }`}
                                   ></i>
                                 }
                                 styles={`relative flex items-center justify-center space-x-2 px-3 py-2 rounded text-white ${
-                                  !conditionalPosition()
+                                  !financeAndAdminConditionalAccess()
                                     ? "bg-gray-500 cursor-not-allowed"
                                     : "bg-[#4398AC]"
                                 }`}
                                 textClass="text-white text-sm" // Ensure the text size is consistent
                                 whileHover={{ scale: 1.02, opacity: 0.95 }}
                                 whileTap={{ scale: 0.98, opacity: 0.9 }}
-                                disabled={!conditionalPosition()}
+                                disabled={!financeAndAdminConditionalAccess()}
                               />
                             </ButtonsComponent>
                           </td>
@@ -473,33 +461,33 @@ const Orders = () => {
                               <FormButton
                                 type="button"
                                 text={
-                                  !conditionalPosition()
+                                  !financeAndAdminConditionalAccess()
                                     ? "Not Authorized"
                                     : "Print"
                                 }
                                 onClick={() => {
-                                  if (conditionalPosition()) {
+                                  if (financeAndAdminConditionalAccess()) {
                                     handlePrintData(order);
                                   }
                                 }}
                                 icon={
                                   <i
                                     className={
-                                      !conditionalPosition()
+                                      !financeAndAdminConditionalAccess()
                                         ? "fa fa-lock"
                                         : "fa fa-print"
                                     }
                                   ></i>
                                 }
                                 styles={`relative flex items-center space-x-2 px-4 py-2 rounded  text-white ${
-                                  !conditionalPosition()
+                                  !financeAndAdminConditionalAccess()
                                     ? "bg-gray-500 cursor-not-allowed"
                                     : "bg-[#002E48]"
                                 }`}
                                 textClass="text-white"
                                 whileHover={{ scale: 1.02, opacity: 0.95 }}
                                 whileTap={{ scale: 0.98, opacity: 0.9 }}
-                                disabled={!conditionalPosition()}
+                                disabled={!financeAndAdminConditionalAccess()}
                               />
                             </ButtonsComponent>
                           </td>
@@ -589,9 +577,7 @@ const Orders = () => {
 
       {isModalOpen && selectedOrder && (
         <ApproveModal
-          reference_code={
-            Math.floor(Math.random() * (999999999 - 111111111)) + 111111111
-          }
+          reference_code={generateReferenceCode()}
           order_id={selectedOrder._id}
           id_number={selectedOrder.id_number}
           course={selectedOrder.course}

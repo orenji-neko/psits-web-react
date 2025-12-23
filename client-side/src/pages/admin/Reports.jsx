@@ -11,11 +11,15 @@ import {
 import ButtonsComponent from "../../components/Custom/ButtonsComponent";
 import ConfirmationModal from "../../components/common/modal/ConfirmationModal";
 import FormButton from "../../components/forms/FormButton";
-import { formattedDate } from "../../components/tools/clientTools";
-import { deletePosition } from "../../components/tools/clientTools";
+import {
+  formattedDate,
+  formattedLastName,
+} from "../../components/tools/clientTools";
+import { financeAndAdminConditionalAccess } from "../../components/tools/clientTools";
 import { ConfirmActionType } from "../../enums/commonEnums";
 import { CSVLink } from "react-csv";
 import { getInformationData } from "../../authentication/Authentication";
+import normalizeField from "../../utils/normalize";
 
 const Reports = () => {
   const [membershipData, setMembershipData] = useState([]);
@@ -93,7 +97,7 @@ const Reports = () => {
 
   const handleDeleteReport = async () => {
     //logic
-    if (await deleteReports(productDeleteId,deleteId, deleteName)) {
+    if (await deleteReports(productDeleteId, deleteId, deleteName)) {
       handleHideConfirmModal();
       fetchMerchandiseData();
     }
@@ -154,20 +158,18 @@ const Reports = () => {
       const allSalesData = data
         ? data.flatMap((sales) => sales.sales_data || [])
         : [];
-      // console.dir(data, { depth: null }); // This will properly display the full object structure
-      // console.dir(allOrderDetails, { depth: null });
-      // console.dir(filteredOrderDetails, { depth: null });
+
       setGetData(data);
       setMerchandiseData(filteredOrderDetails);
       setFilteredMerchandiseData(filteredOrderDetails);
       setProductNames(filteredOrderDetails);
       setSalesData(allSalesData);
-      // console.log(allOrderDetails);
     } catch (error) {
       console.error("Error fetching merchandise data:", error);
     }
   };
 
+  // #1
   const applyFilter = (data, setData) => {
     let filteredData = data;
 
@@ -200,6 +202,15 @@ const Reports = () => {
       if (filterYear) {
         filteredData = filteredData.filter((item) =>
           item.year?.includes(filterYear)
+        );
+      }
+      if (filterDateFrom && filterDateTo) {
+        filteredData = filteredData.filter(
+          (item) =>
+            new Date(formattedDate(item.date)) >=
+              new Date(formattedDate(filterDateFrom)) &&
+            new Date(formattedDate(item.date)) <=
+              new Date(formattedDate(filterDateTo))
         );
       }
     } else {
@@ -244,8 +255,6 @@ const Reports = () => {
             new Date(formattedDate(item.transaction_date)) <=
               new Date(formattedDate(filterDateTo))
         );
-
-        // console.log(filteredData);
       }
 
       if (filterBatch) {
@@ -255,7 +264,7 @@ const Reports = () => {
       }
       if (filterSize) {
         filteredData = filteredData.filter((item) =>
-          item.size?.[0]?.$each?.[0]?.includes(filterSize)
+          Array.isArray(item.size) ? item.size.join(", ") : item.size
         );
       }
       if (filterColor) {
@@ -284,7 +293,7 @@ const Reports = () => {
       setSalesData({});
     }
   };
-  // console.log("This is filter batch" + filterBatch);
+
   const handleFilter = () => {
     if (activeTab === 0) {
       applyFilter(membershipData, setFilteredMembershipData);
@@ -392,13 +401,13 @@ const Reports = () => {
     },
     {
       name: "Size",
-      selector: (row) => row.size?.[0]?.$each?.[0] || "",
+      selector: (row) => normalizeField(row.size).join(", "),
       sortable: true,
       width: "70px",
     },
     {
       name: "Color",
-      selector: (row) => row.variation?.[0]?.$each?.[0] || "",
+      selector: (row) => normalizeField(row.variation).join(", "),
       sortable: true,
     },
 
@@ -410,7 +419,7 @@ const Reports = () => {
       selector: (row) => formattedDate(row.transaction_date),
       sortable: true,
     },
-    ...(deletePosition()
+    ...(financeAndAdminConditionalAccess()
       ? [
           {
             name: "Action",
@@ -462,20 +471,50 @@ const Reports = () => {
       return { membershipCount: 0, renewalCount: 0 };
     }
   };
-
   const { membershipCount, renewalCount } = getMembershipCounts(membershipData);
 
   const membershipRevenue = membershipCount * 50;
   const renewalRevenue = renewalCount * 50;
 
-  const formattedMerchandiseData = filteredMerchandiseData.map((row) => ({
-    ...row,
-    size: row.size?.[0]?.$each?.[0] || "",
-    variation: row.variation?.[0]?.$each?.[0] || "",
-  }));
+  const formattedMerchandiseData = filteredMerchandiseData.map((row) => {
+    return {
+      ...row,
+      size: normalizeField(row.size),
+      variation: normalizeField(row.variation),
+    };
+  });
   const uniqueProductNames = Array.from(
     new Set(productNames.map((detail) => detail.product_name))
   );
+
+  const exportDataMembershipData = filteredMembershipData.map((item) => ({
+    "Reference Code": item.reference_code,
+    "Student ID": item.id_number,
+    Name: formattedLastName(item.name),
+    Course: item.course,
+    "Year Level": item.year,
+    Type: item.type,
+    Date: item.date,
+    "Approved By": item.admin,
+  }));
+
+  const exportDataMerchandiseData = formattedMerchandiseData.map((item) => {
+    return {
+      "Reference Code": item.reference_code,
+      Merchandise: item.product_name,
+      "Student ID": item.id_number,
+      Name: formattedLastName(item.student_name),
+      Course: item.course,
+      "Year Level": item.year,
+      Batch: item.batch,
+      Size: normalizeField(item.size).join(", "),
+      Variation: normalizeField(item.variation).join(", "),
+      Qty: item.quantity,
+      Total: item.total,
+      "Transaction Date": formattedDate(item.transaction_date),
+    };
+  });
+
   return (
     <div className="container mx-auto p-4">
       <Tabs selectedIndex={activeTab} onSelect={(index) => setActiveTab(index)}>
@@ -527,7 +566,9 @@ const Reports = () => {
               Filter
             </button>
             <CSVLink
-              data={filteredMembershipData.length ? filteredMembershipData : []}
+              data={
+                exportDataMembershipData.length ? exportDataMembershipData : []
+              }
               filename="membership-data.csv"
             >
               <button
@@ -599,9 +640,17 @@ const Reports = () => {
 
             <CSVLink
               data={
-                formattedMerchandiseData.length ? formattedMerchandiseData : []
+                exportDataMerchandiseData.length
+                  ? exportDataMerchandiseData
+                  : []
               }
-              filename="merchandise-data.csv"
+              filename={
+                filterProductName !== ""
+                  ? `${filterProductName}${
+                      "-" + formattedDate(new Date())
+                    }${"-data.csv"}`
+                  : "merchandise-data.csv"
+              }
             >
               <button
                 className="bg-green-500 text-white px-4 py-2 rounded"

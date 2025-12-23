@@ -7,12 +7,15 @@ const token = sessionStorage.getItem("Token");
 
 export const getEvents = async () => {
   try {
-    const response = await axios.get(`${backendConnection()}/api/events`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      `${backendConnection()}/api/events/get-all-event`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     return response.data;
   } catch (error) {
@@ -25,7 +28,30 @@ export const getEvents = async () => {
     }
   }
 };
+export const createEvent = async (data) => {
+  try {
+    const response = await axios.post(
+      `${backendConnection()}/api/events/create-event`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      window.location.reload();
+      return false;
+    } else {
+      console.log("error", "An error occurred");
+      return false;
+    }
+  }
+};
 //getAttendee
 
 export const getAttendees = async (id) => {
@@ -59,6 +85,8 @@ export const markAsPresent = async (
   eventId,
   attendeeId,
   campus,
+  course,
+  year,
   attendeeName,
   navigate
 ) => {
@@ -70,6 +98,9 @@ export const markAsPresent = async (
       {
         campus,
         attendeeName,
+        course,
+        year,
+        currentDate: new Date(),
       },
       {
         headers: {
@@ -80,25 +111,13 @@ export const markAsPresent = async (
     );
     if (response.status === 200) {
       showToast("success", "Attendance successfully recorded!");
-      navigate(`/admin/attendance/${eventId}`); // Navigate back after successful update
+      return true;
     }
   } catch (error) {
     console.error("Error marking attendance:", error);
 
     if (error.response) {
-      switch (error.response.status) {
-        case 403:
-          showToast("error", "Access denied. Admins only.");
-          break;
-        case 404:
-          showToast("error", "Event or attendee not found.");
-          break;
-        case 400:
-          showToast("error", "Attendance already recorded.");
-          break;
-        default:
-          showToast("error", "An error occurred while recording attendance.");
-      }
+      showToast("error", error.response.data.message || "An error occured");
     } else {
       showToast("error", "An error occurred while recording attendance.");
     }
@@ -190,7 +209,11 @@ export const raffleWinner = async (eventId, attendeeId, attendeeName) => {
   }
 };
 
-export const removeRaffleAttendee = async (eventId, attendeeId,attendeeName) => {
+export const removeRaffleAttendee = async (
+  eventId,
+  attendeeId,
+  attendeeName
+) => {
   try {
     const response = await axios.put(
       `${backendConnection()}/api/events/raffle/remove/${eventId}/${attendeeId}`,
@@ -271,6 +294,29 @@ export const removeAttendee = async (formData) => {
         },
       }
     );
+    showToast(
+      response.status === 200 ? "success" : "error",
+      response.data.message
+    );
+    return response.status === 200 ? true : false;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const removeEvent = async (eventId) => {
+  try {
+    const response = await axios.post(
+      `${backendConnection()}/api/events/remove-event`,
+      { eventId },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
     showToast(
       response.status === 200 ? "success" : "error",
       response.data.message

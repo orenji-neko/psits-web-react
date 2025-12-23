@@ -16,6 +16,7 @@ export const setInformationData = (data, role) => {
 export const getInformationData = () => {
   return {
     id_number: storedData?.id_number || null,
+    rfid: storedData?.rfid || "N/A",
     name: storedData?.name || null,
     email: storedData?.email || null,
     course: storedData?.course || null,
@@ -24,6 +25,7 @@ export const getInformationData = () => {
     position: storedData?.position || null,
     audience: storedData?.role || null,
     campus: storedData?.campus || null,
+    access: storedData?.access || null,
   };
 };
 export const removeAuthentication = () => {

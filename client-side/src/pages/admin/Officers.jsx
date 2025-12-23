@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Tab from "../../components/Tab";
-import {
-  presidentPosition,
-  headDevPosition,
-} from "../../components/tools/clientTools";
+import { executiveAndAdminConditionalAccess } from "../../components/tools/clientTools";
 
 const Officers = () => {
   const location = useLocation();
@@ -16,34 +13,20 @@ const Officers = () => {
       icon: "fas fa-users",
     },
     {
-      path: "/admin/officers/student-account",
-      text: `Officers`,
+      path: "/admin/officers/members",
+      text: `Members`,
       icon: "fas fa-users",
     },
-    {
-      path: "/admin/officers/developers",
-      text: `Developers`,
-      icon: "fas fa-code",
-    },
-    {
-      path: "/admin/officers/media",
-      text: `Media`,
-      icon: "fas fa-photo-video",
-    },
-    {
-      path: "/admin/officers/volunteers",
-      text: `Volunteers`,
-      icon: "fas fa-hands-helping",
-    },
+
     {
       path: "/admin/officers/suspend",
       text: `Suspended`,
       icon: "fas fa-ban",
     },
-    presidentPosition() || headDevPosition()
+    executiveAndAdminConditionalAccess()
       ? {
           path: "/admin/officers/request",
-          text: `Request `,
+          text: `Members Request `,
           icon: "fas fa-envelope-open-text",
         }
       : {
@@ -52,7 +35,7 @@ const Officers = () => {
           icon: "fas fa-lock",
           disabled: true,
         },
-    presidentPosition() || headDevPosition()
+    executiveAndAdminConditionalAccess()
       ? {
           path: "/admin/officers/admin-request",
           text: `Admin Request `,

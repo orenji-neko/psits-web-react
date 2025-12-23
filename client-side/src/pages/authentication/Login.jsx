@@ -2,6 +2,7 @@ import { login } from "../../api/index";
 import ai from "../../assets/images/AI.png";
 import logo from "../../assets/images/login.png";
 import valen from "../../assets/images/valen.png";
+
 import {
   attemptAuthentication,
   resetAttemptAuthentication,
@@ -23,7 +24,7 @@ const Login = () => {
   const [remainingTime, setRemainingTime] = useState();
   const currentDate = new Date();
   const janStart = new Date(currentDate.getFullYear(), 1, 10);
-  const janEnd = new Date(currentDate.getFullYear(), 5, 30);
+  const janEnd = new Date(currentDate.getFullYear(), 11, 30);
 
   useEffect(() => {
     let interval;
@@ -104,9 +105,14 @@ const Login = () => {
               window.location.href = `/${data.role.toLowerCase()}/dashboard`;
             }
           } else {
+          
             attemptAuthentication();
             setRemainingTime(60);
           }
+        } else {
+         
+          attemptAuthentication();
+          setRemainingTime(60);
         }
       } else {
         showToast(

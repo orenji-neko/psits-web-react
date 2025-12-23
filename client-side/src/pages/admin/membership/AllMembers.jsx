@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   membership,
-  renewAllStudent,
+  revokeAllStudent,
   studentDeletion,
+  approveMembership,
 } from "../../../api/admin";
 import backendConnection from "../../../api/backendApi";
 import { getInformationData } from "../../../authentication/Authentication";
@@ -13,10 +14,13 @@ import ButtonsComponent from "../../../components/Custom/ButtonsComponent";
 import TableComponent from "../../../components/Custom/TableComponent";
 import ConfirmationModal from "../../../components/common/modal/ConfirmationModal";
 import FormButton from "../../../components/forms/FormButton";
-import { higherPosition } from "../../../components/tools/clientTools";
+import { getMembershipStatusStudents } from "../../../api/students";
 import { ConfirmActionType } from "../../../enums/commonEnums";
 import { showToast } from "../../../utils/alertHelper";
 import EditMember from "./EditMember";
+import StudentMembershipHistory from "./StudentMembershipHistory";
+import OptionModal from "../../../components/common/modal/OptionModal";
+import { generateReferenceCode } from "../../../components/tools/clientTools";
 
 const Membership = () => {
   const [data, setData] = useState([]);
@@ -33,7 +37,16 @@ const Membership = () => {
   const [id, setId] = useState("");
   const [viewChange, setViewChange] = useState(false);
   const [renewStudent, setRenewStudent] = useState(false);
+  const [requestModal, setRequestModal] = useState(false);
+  const [requestId, setRequestId] = useState("");
+  const [formData, setFormData] = useState({
+    type: "Membership",
+    id_number: requestId,
+  });
+  const [isDetailsView, setIsDetailsView] = useState(false);
   const token = sessionStorage.getItem("Token");
+  const [isOptionModalVisible, setIsOptionModalVisible] = useState(false);
+  const [studentInformation, setStudentInformation] = useState({});
 
   const user = getInformationData();
 
@@ -51,9 +64,19 @@ const Membership = () => {
   });
 
   const handleRenewStudent = () => {
-    if (renewAllStudent()) {
+    if (revokeAllStudent()) {
       setRenewStudent(false);
     }
+  };
+  const handleViewDetails = (row) => {
+    setId(row.id_number);
+    setIsDetailsView(true);
+  };
+
+  const handleOptionModal = (row) => {
+    setStudentInformation(row);
+
+    setIsOptionModalVisible(!isOptionModalVisible);
   };
 
   const handleEditButtonClick = (row) => {
@@ -102,6 +125,46 @@ const Membership = () => {
     setIsLoading(false);
   };
 
+  const handleRequestMembershipModal = async (row) => {
+    try {
+      const response = await getMembershipStatusStudents(row.id_number);
+      if (response) {
+        const updatedFormData = {
+          type:
+            response.status === "NOT_APPLIED" && response.isFirstApplication
+              ? "Membership"
+              : "Renewal",
+          id_number: row.id_number,
+          reference_code: generateReferenceCode(),
+        };
+
+        setFormData(updatedFormData);
+        setRequestId(row.id_number);
+        setRequestModal(true);
+      }
+    } catch (error) {
+      console.error("Error fetching membership status:", error);
+      showToast("error", "Failed to fetch membership status.");
+    }
+  };
+
+  const handleRequestMembership = async () => {
+    try {
+      const result = await approveMembership(formData);
+      if (result) {
+        setRequestModal(false);
+        fetchData();
+        setFormData({
+          type: "Membership",
+          id_number: "",
+        });
+      }
+    } catch (error) {
+      console.error("Error sending membership request:", error);
+      showToast("error", "Failed to send membership request.");
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -133,6 +196,30 @@ const Membership = () => {
   const hideModal = () => {
     setIsModalVisible(false);
     setStudentIdToBeDeleted("");
+  };
+
+  const printAction = (action) => {
+    switch (action.toLowerCase()) {
+      case "edit":
+        handleEditButtonClick(studentInformation);
+        break;
+      case "delete":
+        showModal(studentInformation);
+        break;
+      case "request":
+        handleRequestMembershipModal(studentInformation);
+        break;
+      case "renew":
+        handleRequestMembershipModal(studentInformation);
+        break;
+      case "change":
+        handleChangePassword(studentInformation.id_number);
+        break;
+      case "history":
+        handleViewDetails(studentInformation);
+
+        break;
+    }
   };
 
   const handleConfirmDeletion = async () => {
@@ -237,26 +324,28 @@ const Membership = () => {
     {
       key: "membership",
       label: "Membership",
-      selector: (row) => row.membership,
+      selector: (row) => row.membershipStatus,
       sortable: true,
       cell: (row) => (
         <div className="text-center">
           <span
             className={`px-2 py-1 rounded text-xs ${
-              row.membership === "None" || row.renew === "None"
+              row.membershipStatus === "NOT_APPLIED"
                 ? "bg-gray-200 text-gray-800"
-                : row.membership === "Pending" || row.renew === "Pending"
+                : row.membershipStatus === "PENDING"
                 ? "bg-yellow-200 text-yellow-800"
                 : "bg-green-200 text-green-800"
             }`}
           >
-            {row.membership === "None" || row.renew === "None"
-              ? "None"
-              : row.membership === "Pending" || row.renew === "Pending"
-              ? row.renew === "Pending"
-                ? "Renewal"
-                : "Pending"
-              : "Active"}
+            {row.membershipStatus === "NOT_APPLIED"
+              ? "Not Applied"
+              : row.membershipStatus === "PENDING"
+              ? "Pending"
+              : row.membershipStatus === "RENEWED"
+              ? "Renewed"
+              : row.membershipStatus === "ACTIVE"
+              ? "Active"
+              : "Unknown Status"}
           </span>
         </div>
       ),
@@ -267,33 +356,12 @@ const Membership = () => {
       cell: (row) => (
         <ButtonsComponent>
           <FormButton
+            text="More"
             type="button"
-            text="Change"
-            onClick={() => handleChangePassword(row.id_number)}
-            icon={<i className="fas fa-key" />} // Simple icon
-            styles="flex items-center space-x-2 bg-gray-200 text-gray-800 rounded-md px-3 py-1.5 transition duration-150 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            textClass="text-gray-800"
-            whileHover={{ scale: 1.02, opacity: 0.95 }}
-            whileTap={{ scale: 0.98, opacity: 0.9 }}
-          />
-
-          <FormButton
-            type="button"
-            text="Edit"
-            onClick={() => handleEditButtonClick(row)}
-            icon={<i className="fas fa-edit" />} // Simple icon
+            onClick={() => handleOptionModal(row)}
+            icon={<i className="fas fa-cog" />}
             styles="flex items-center space-x-2 bg-gray-200 text-gray-800 rounded-md px-3 py-1.5 transition duration-150 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
             textClass="text-gray-800" // Elegant text color
-            whileHover={{ scale: 1.02, opacity: 0.95 }}
-            whileTap={{ scale: 0.98, opacity: 0.9 }}
-          />
-          <FormButton
-            type="button"
-            text="Delete"
-            onClick={() => showModal(row)}
-            icon={<i className="fas fa-trash" />} // Simple icon
-            styles="flex items-center space-x-2 bg-gray-200 text-red-800 rounded-md px-3 py-1.5 transition duration-150 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
-            textClass="text-red-800" // Elegant text color
             whileHover={{ scale: 1.02, opacity: 0.95 }}
             whileTap={{ scale: 0.98, opacity: 0.9 }}
           />
@@ -304,18 +372,6 @@ const Membership = () => {
 
   return (
     <div className="">
-      {higherPosition() && (
-        <div className="my-2 py-2">
-          <button
-            className="text-white bg-red-500 hover:bg-red-400 p-2 rounded-sm text-sm"
-            onClick={() => setRenewStudent(true)}
-            disabled
-          >
-            Renew All Student
-          </button>
-        </div>
-      )}
-
       <TableComponent columns={columns} data={filteredData} />
       {isEditModalVisible && (
         <EditMember
@@ -323,6 +379,12 @@ const Membership = () => {
           onClose={handleEditModalClose}
           studentData={memberToEdit}
           onSave={handleSaveEditedMember}
+        />
+      )}
+      {isDetailsView && (
+        <StudentMembershipHistory
+          studentId={id}
+          onClose={() => setIsDetailsView(false)}
         />
       )}
       {isModalVisible && (
@@ -349,6 +411,33 @@ const Membership = () => {
             onConfirm={handleRenewStudent}
           />
         </>
+      )}
+      {requestModal && (
+        <ConfirmationModal
+          confirmType={ConfirmActionType.REQUEST}
+          onCancel={() => setRequestModal(false)}
+          onConfirm={handleRequestMembership}
+        />
+      )}
+      {isOptionModalVisible && (
+        <OptionModal
+          onClose={handleOptionModal}
+          onAction={{
+            label: [
+              "Edit",
+              "Delete",
+              studentInformation.isFirstApplication === true
+                ? "Request_Membership"
+                : "Renew_Membership",
+              "Change_Password",
+              "Membership_History",
+            ],
+          }}
+          actionKey={(action) => {
+            printAction(action);
+          }}
+          information={studentInformation}
+        />
       )}
     </div>
   );

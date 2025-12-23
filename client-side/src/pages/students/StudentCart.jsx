@@ -200,6 +200,7 @@ const CartItem = ({
     limited,
     sizes,
     variation,
+    batch,
   } = product;
   const [isModalOpen, setModalOpen] = useState(false);
   const user = getInformationData();
@@ -258,6 +259,9 @@ const CartItem = ({
         <h4 className="text-base sm:text-lg font-semibold text-gray-800">
           {product_name}
         </h4>
+        <p className="text-sm sm:text-base font-medium text-gray-700">
+          Batch: {batch}
+        </p>
         {sizes && sizes.length > 0 && (
           <p className="text-sm sm:text-base font-medium text-gray-700">
             Size: {sizes.join(", ")}
@@ -350,7 +354,10 @@ const StudentCart = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [status, setStatus] = useState({ membership: "", renew: "" });
+  const [status, setStatus] = useState({
+    status: "",
+    isFirstApplication: true,
+  });
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const user = getInformationData();
@@ -384,7 +391,10 @@ const StudentCart = () => {
       const membershipStatus = await getMembershipStatusStudents(
         user.id_number
       );
-      setStatus(membershipStatus);
+      setStatus({
+        status: membershipStatus.status,
+        isFirstApplication: membershipStatus.isFirstApplication,
+      });
     } catch (error) {
       setError(error.message || "Failed to fetch membership status");
     }
@@ -395,11 +405,7 @@ const StudentCart = () => {
   }, []);
 
   const statusVerify = () => {
-    return (
-      (status.membership === "Accepted" && status.renew === "None") ||
-      status.renew === "Accepted" ||
-      (status.membership === "Accepted" && status.renew !== "Pending")
-    );
+    return status.status === "ACTIVE" || status.status === "RENEWED";
   };
 
   const handleQuantityChange = (id, newQuantity) => {
@@ -434,7 +440,7 @@ const StudentCart = () => {
     setShowModal(true);
     setFormData({
       id_number: user.id_number,
-      rfid: user.rfid,
+      rfid: user.rfid ? user.rfid : "N/A",
       course: user.course,
       year: user.year,
       student_name: user.name,

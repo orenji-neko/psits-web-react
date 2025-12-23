@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import {
   ConfirmActionType,
   ConfirmActionWords,
@@ -7,6 +7,19 @@ import { capitalizeFirstLetter } from "../../../utils/stringUtils.js";
 
 function ConfirmationModal({ confirmType, onConfirm, onCancel, type }) {
   let confirmTypeWord = ConfirmActionWords[confirmType];
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = async () => {
+    setIsLoading(true);
+    try {
+      await onConfirm();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const capitalizeFirstLetter = (string) =>
+    string.charAt(0).toUpperCase() + string.slice(1);
 
   const confirmButtonColor =
     confirmType === ConfirmActionType.DELETION ||
@@ -15,7 +28,8 @@ function ConfirmationModal({ confirmType, onConfirm, onCancel, type }) {
     confirmType === ConfirmActionType.ORDER ||
     confirmType === ConfirmActionType.CANCEL ||
     confirmType === ConfirmActionType.REMOVE ||
-    confirmType === ConfirmActionType.DECLINE
+    confirmType === ConfirmActionType.DECLINE ||
+    confirmType === ConfirmActionType.RESET
       ? "bg-[#991b1b] hover:bg-[#b92121]"
       : "bg-green-500 hover:bg-green-600";
 
@@ -53,6 +67,9 @@ function ConfirmationModal({ confirmType, onConfirm, onCancel, type }) {
             Are you sure you want to {confirmTypeWord === "renewal" && "do "}
             {confirmTypeWord}
             {confirmTypeWord === "cancel" ? " the membership request of " : " "}
+            {confirmTypeWord === "request"
+              ? " membership for this student, and that the payment will be charged automatically "
+              : " "}
             {confirmTypeWord === "cancel this order" ||
             confirmTypeWord === "renewal"
               ? ""
@@ -64,6 +81,12 @@ function ConfirmationModal({ confirmType, onConfirm, onCancel, type }) {
               ? " this role for this student"
               : type === "officer"
               ? " this officer"
+              : confirmTypeWord === "request"
+              ? ""
+              : confirmTypeWord === "reset"
+              ? " all students"
+              : type === "event"
+              ? " this event"
               : " this student"}
             ?
           </p>
@@ -80,12 +103,22 @@ function ConfirmationModal({ confirmType, onConfirm, onCancel, type }) {
           </button>
           <button
             type="button"
-            className={`ml-3 px-6 py-2 text-white rounded ${confirmButtonColor}`}
-            onClick={onConfirm}
+            className={`ml-3 px-6 py-2 text-white rounded ${confirmButtonColor} ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            onClick={handleClick}
+            disabled={isLoading}
           >
-            {confirmTypeWord !== "cancel"
-              ? capitalizeFirstLetter(confirmTypeWord)
-              : "Yes"}
+            {isLoading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>Loading...</span>
+              </div>
+            ) : confirmTypeWord !== "cancel" ? (
+              capitalizeFirstLetter(confirmTypeWord)
+            ) : (
+              "Yes"
+            )}
           </button>
         </div>
       </div>
