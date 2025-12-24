@@ -5,7 +5,6 @@ import { Home } from "./pages/Home";
 import { Events } from "./pages/Events";
 import { Organizations } from "./pages/Organizations";
 import { OtpCode } from "./pages/auth/OtpCode";
-import { SetNewPassword } from "./pages/auth/SetNewPassword";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { TermsOfCondition } from "./pages/TermsOfCondition";
 import { Dashboard } from "./pages/admin/Dashboard";
@@ -13,6 +12,7 @@ import { ErrorPage } from "./pages/ErrorPage";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import SetNewPassword from "./pages/auth/SetNewPassword";
 
 export default createBrowserRouter([
   {
