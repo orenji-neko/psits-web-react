@@ -1,7 +1,7 @@
-import { Footer } from "@/components/common/Footer";
+import { Footer } from '@/components/common/Footer';
 // import { Header } from "@/components/common/Header";
-import { GetInvolvedSection } from "@/components/sections/get-involved/GetInvolvedSection";
-import { InstitutionalIdentitySection } from "@/components/sections/institutional-identity/InstitutionalIdentitySection";
+import { GetInvolvedSection } from '@/components/sections/get-involved/GetInvolvedSection';
+import { InstitutionalIdentitySection } from '@/components/sections/institutional-identity/InstitutionalIdentitySection';
 
 export const Home = () => {
   return (
