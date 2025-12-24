@@ -1,19 +1,26 @@
-import { Link } from 'react-router'
-import logo from '@/assets/logo.png'
-import { Button } from '../ui/button'
+import { Link } from 'react-router';
+import logo from '@/assets/logo.png';
+import { Button } from '../ui/button';
 
 export const Header = () => {
   const navLinks = [
-    { title: "Home", href: "/" },
-    { title: "Events", href: "/events" },
-    { title: "Organizations", href: "/organizations" },
+    { title: 'Home', href: '/' },
+    { title: 'Events', href: '/events' },
+    { title: 'Organizations', href: '/organizations' },
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
-          <img src={logo} alt="PSITS Logo" className="h-10 w-10 object-contain" />
+        <Link
+          to="/"
+          className="flex items-center gap-3 transition-opacity hover:opacity-90"
+        >
+          <img
+            src={logo}
+            alt="PSITS Logo"
+            className="h-10 w-10 object-contain"
+          />
           <div className="flex flex-col">
             <span className="text-sm font-bold leading-none tracking-tight text-primary">
               PSITS
@@ -25,7 +32,7 @@ export const Header = () => {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
+          {navLinks.map(link => (
             <Link
               key={link.href}
               to={link.href}
@@ -46,5 +53,5 @@ export const Header = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};

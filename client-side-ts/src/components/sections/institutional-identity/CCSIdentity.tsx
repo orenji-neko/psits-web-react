@@ -1,9 +1,8 @@
-import type { CCSData } from "./InstitutionalIdentitySection";
-import imageLogo from "@/assets/ccsidentity.png";
-import announcement from "@/assets/announcement.png"
-import { InsitutionalIdentityContent } from "./InsitutionalIdentityContent";
-import { Card } from "@/components/ui/card";
-
+import type { CCSData } from './InstitutionalIdentitySection';
+import imageLogo from '@/assets/ccsidentity.png';
+import announcement from '@/assets/announcement.png';
+import { InsitutionalIdentityContent } from './InsitutionalIdentityContent';
+import { Card } from '@/components/ui/card';
 
 interface Props {
   data: CCSData;
@@ -36,7 +35,6 @@ export const CCSIdentity = ({ data }: Props) => {
 
           {/* Right Column: Content */}
           <div className="relative w-full lg:flex-2 h-[400px] sm:h-[500px] lg:h-auto lg:self-stretch">
-
             {/* Clipped Background Area */}
             <div className="absolute inset-0 rounded-[2rem] overflow-hidden z-10 w-full h-full lg:translate-x-0">
               <div
@@ -79,7 +77,7 @@ export const CCSIdentity = ({ data }: Props) => {
                     0% 100%, 
                     100% 100%, 
                     100% 0%
-                  )`
+                  )`,
                 }}
               >
                 {/* Background Image */}
@@ -92,11 +90,12 @@ export const CCSIdentity = ({ data }: Props) => {
             </div>
 
             {/* Floating Card */}
-            <div className="absolute left-[-20px] sm:left-[-40px] lg:left-[-100px] top-1/2 h-[60%] w-[70%] lg:w-[60%]
+            <div
+              className="absolute left-[-20px] sm:left-[-40px] lg:left-[-100px] top-1/2 h-[60%] w-[70%] lg:w-[60%]
                   -translate-y-1/2 rounded-[2rem]
                   bg-primary border outline outline-background outline-[0.5rem]
-                  z-20 shadow-xl overflow-hidden transition-all duration-300">
-
+                  z-20 shadow-xl overflow-hidden transition-all duration-300"
+            >
               {/* Inner Image */}
               <img
                 src={announcement}

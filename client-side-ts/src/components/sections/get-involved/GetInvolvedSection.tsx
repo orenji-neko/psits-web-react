@@ -1,7 +1,7 @@
-import { Card, CardDescription, CardTitle } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
-import { Bell, Code2, Users2, ArrowRight } from "lucide-react"
-import { GetInvolvedCard } from "./GetInvolvedCard"
+import { Card, CardDescription, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import { Bell, Code2, Users2, ArrowRight } from 'lucide-react';
+import { GetInvolvedCard } from './GetInvolvedCard';
 
 export const GetInvolvedSection = () => {
   return (
@@ -14,20 +14,23 @@ export const GetInvolvedSection = () => {
 
       <div className="container px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-
           {/* Header Area */}
           <div className="lg:col-span-5 space-y-8 sticky lg:top-32">
             <div className="space-y-4">
-              <h2 className={cn(
-                "text-sm font-bold uppercase tracking-[0.2em] text-primary/80"
-              )}>
+              <h2
+                className={cn(
+                  'text-sm font-bold uppercase tracking-[0.2em] text-primary/80'
+                )}
+              >
                 Join the Community
               </h2>
-              <h1 className={cn(
-                "text-4xl sm:text-5xl md:text-6xl lg:text-7xl",
-                "font-black uppercase tracking-tighter leading-[0.9]",
-                "bg-gradient-to-br from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent"
-              )}>
+              <h1
+                className={cn(
+                  'text-4xl sm:text-5xl md:text-6xl lg:text-7xl',
+                  'font-black uppercase tracking-tighter leading-[0.9]',
+                  'bg-gradient-to-br from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent'
+                )}
+              >
                 Get <br className="hidden md:block" /> Involved
               </h1>
             </div>
@@ -39,12 +42,16 @@ export const GetInvolvedSection = () => {
 
             <div className="flex flex-wrap gap-4 pt-4">
               <div className="flex -space-x-3 overflow-hidden">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="inline-block h-10 w-10 rounded-full ring-2 ring-background bg-muted border border-border" />
+                {[1, 2, 3, 4].map(i => (
+                  <div
+                    key={i}
+                    className="inline-block h-10 w-10 rounded-full ring-2 ring-background bg-muted border border-border"
+                  />
                 ))}
               </div>
               <p className="flex items-center text-sm font-medium text-muted-foreground">
-                <span className="text-foreground font-bold mr-1">500+</span> ICT Students already joined
+                <span className="text-foreground font-bold mr-1">500+</span> ICT
+                Students already joined
               </p>
             </div>
           </div>
@@ -70,9 +77,8 @@ export const GetInvolvedSection = () => {
               className="sm:col-span-2"
             />
           </div>
-
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
