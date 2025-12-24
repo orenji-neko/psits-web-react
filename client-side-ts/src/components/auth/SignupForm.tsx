@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '../ui/card';
@@ -23,6 +24,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { Button } from '../ui/button';
+import { Link } from 'react-router';
 
 const formSchema = z
   .object({
@@ -357,6 +359,14 @@ export default function SignupForm({
           </FieldGroup>
         </form>
       </CardContent>
+      <CardFooter>
+        <p className="w-full mt-2 text-sm font-extralight text-gray-300 flex flex-row justify-center items-center">
+          Remember your password?&nbsp;
+          <Link to="/auth/login" className="text-black">
+            Sign in
+          </Link>
+        </p>
+      </CardFooter>
     </Card>
   );
 }

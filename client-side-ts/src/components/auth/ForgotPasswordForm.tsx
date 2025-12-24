@@ -11,46 +11,43 @@ import {
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
 import { Link } from 'react-router';
 
 const formSchema = z.object({
   id: z.string().min(8, 'ID Number must at least be 8 digits.'),
-  password: z.string().min(8, 'Password must at least be 8 characters'),
-  rememberMe: z.boolean(),
+  email: z.string().email('Please enter a valid email address.'),
 });
 
-export type LoginCredentials = z.infer<typeof formSchema>;
+export type ForgotPasswordCredentials = z.infer<typeof formSchema>;
 
-export interface LoginFormProps {
-  onLogin?: (values: LoginCredentials) => void;
+export interface ForgotPasswordFormProps {
+  onSubmit?: (values: ForgotPasswordCredentials) => void;
 }
 
-export default function LoginForm({ onLogin }: LoginFormProps) {
+export default function ForgotPasswordForm({ onSubmit }: ForgotPasswordFormProps) {
   const form = useForm({
     defaultValues: {
       id: '',
-      password: '',
-      rememberMe: false,
+      email: '',
     },
     validators: {
       onSubmit: formSchema,
     },
-    onSubmit: async ({ value }: { value: LoginCredentials }) =>
-      onLogin && onLogin(value),
+    onSubmit: async ({ value }: { value: ForgotPasswordCredentials }) =>
+      onSubmit && onSubmit(value),
   });
 
   return (
     <Card className="w-full sm:max-w-md border-none shadow-none">
       <CardHeader>
-        <CardTitle className="text-4xl font-semibold">Welcome Back</CardTitle>
+        <CardTitle className="text-4xl font-semibold">Forgot Password</CardTitle>
         <CardDescription>
-          Welcome back! Please enter your details.
+          Enter your student ID number to reset your password.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form
-          id="login-form"
+          id="forgot-password-form"
           onSubmit={e => {
             e.preventDefault();
             form.handleSubmit();
@@ -85,21 +82,24 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
               }}
             />
             <form.Field
-              name="password"
+              name="email"
               children={field => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>
+                      Email Address
+                    </FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}
-                      type="password"
+                      type="email"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={e => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
+                      placeholder="Enter your email address"
                       autoComplete="off"
                     />
                     {isInvalid && (
@@ -109,49 +109,19 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
                 );
               }}
             />
-            <div className="flex flex-row justify-between">
-              <form.Field
-                name="rememberMe"
-                children={field => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid} orientation="horizontal">
-                      <Checkbox
-                        id={field.name}
-                        name={field.name}
-                        checked={field.state.value}
-                        onCheckedChange={checked =>
-                          field.handleChange(checked === true)
-                        }
-                      />
-                      <FieldLabel htmlFor={field.name} className="font-normal">
-                        Remember Me
-                      </FieldLabel>
-                    </Field>
-                  );
-                }}
-              />
-              <Link
-                to="/auth/forgot-password"
-                className="w-full text-sm text-right font-extralight"
-              >
-                Forgot Password
-              </Link>
-            </div>
           </FieldGroup>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col">
         <Field orientation="horizontal">
-          <Button type="submit" form="login-form" className="w-full">
-            Sign in
+          <Button type="submit" form="forgot-password-form" className="w-full">
+            Reset Password
           </Button>
         </Field>
         <p className="mt-2 text-sm font-extralight text-gray-300 flex flex-row justify-center items-center">
-          Don't have an account?&nbsp;
-          <Link to="/auth/signup" className="text-black">
-            Sign up
+          Remember your password?&nbsp;
+          <Link to="/auth/login" className="text-black">
+            Sign in
           </Link>
         </p>
       </CardFooter>
