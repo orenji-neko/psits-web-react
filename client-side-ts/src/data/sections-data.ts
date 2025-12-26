@@ -1,4 +1,39 @@
-import { Lightbulb, HeartHandshake, Award, Bell, Code2, Users2 } from "lucide-react";
+import { Lightbulb, HeartHandshake, Award, Bell, Code2, Users2, BookOpen, Calendar, Trophy } from "lucide-react";
+import Dennis from '../assets/Faculty/15.png';
+import Jia from '../assets/Faculty/16.png';
+import Tadlip from '../assets/Core Officers 2025/1.png';
+import Tuyor from '../assets/Core Officers 2025/2.png';
+import Alon from '../assets/Core Officers 2025/3.png';
+import Español from '../assets/Core Officers 2025/5.png';
+import Peresores from '../assets/Core Officers 2025/6.png';
+import Laygan from '../assets/Core Officers 2025/7.png';
+import Penera from '../assets/Core Officers 2025/9.png';
+import Postrero from '../assets/Core Officers 2025/8.png';
+import Cabunilas from '../assets/Core Officers 2025/10.png';
+import Laurito from '../assets/Core Officers 2025/13.png';
+import Rallos from '../assets/Core Officers 2025/12.png';
+import Villanueva from '../assets/Core Officers 2025/14.png';
+
+import Genabio from '../assets/Development Team 2025/28.png';
+import Napisa from '../assets/Development Team 2025/19.png';
+import Dilao from '../assets/Development Team 2025/17.png';
+import Igot from '../assets/Development Team 2025/18.png';
+import Alin from '../assets/Development Team 2025/20.png';
+import Barral from '../assets/Development Team 2025/22.png';
+import Laroco from '../assets/Development Team 2025/21.png';
+import Albeos from '../assets/Development Team 2025/23.png';
+
+import aiLab from '../assets/aiLab.jpg';
+
+import Orientation from '../assets/orientation2025/1.jpg';
+import ICT from '../assets/ict-congress/1.jpg';
+import Blockchain from '../assets/cbc/1.jpg';
+import CCSDays from '../assets/awarding/1.jpg';
+import Nihonggo from '../assets/nihonggo/1.jpg';
+import EmbeddedSystems from '../assets/embedded/1.jpg';
+import UCCCSCares from '../assets/embedded/1.jpg';
+import UCIntramurals from '../assets/intramurals/1.jpg';
+import CCSAcquaintance from '../assets/akwe/CCS 4 (28).jpg';
 
 // --- Home Banner Data ---
 export const homeBannerData = {
@@ -45,23 +80,47 @@ export const getInvolvedData = {
         memberCount: "500+"
     },
     cards: [
-        {
+         {
             title: "Announcements",
             description: "Don't miss out! Stay updated on PSITS-hosted workshops, hackathons, and more events. Follow us for more details!",
             icon: Bell,
+            image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1974&auto=format&fit=crop",
             className: "h-full"
         },
         {
             title: "Collaborations",
             description: "Unleash your potential! Aspiring Developers, collaborate with us on cutting-edge projects on GitHub.",
             icon: Code2,
+            image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop",
             className: "h-full"
         },
         {
             title: "Social Connections",
             description: "Build friendships, find mentors, and grow your network. Connect with like-minded peers and future colleagues!",
             icon: Users2,
-            className: "sm:col-span-2"
+            image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2032&auto=format&fit=crop",
+            className: "h-full"
+        },
+        {
+            title: "Events & Activities",
+            description: "From hackathons to seminars, participate in exciting events that sharpen your skills and expand your horizons.",
+            icon: Calendar,
+            image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop",
+            className: "h-full"
+        },
+        {
+            title: "Learning Resources",
+            description: "Access exclusive tutorials, study materials, and guides curated by fellow students and industry professionals.",
+            icon: BookOpen,
+            image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1973&auto=format&fit=crop",
+            className: "h-full"
+        },
+        {
+            title: "Competitions",
+            description: "Challenge yourself in coding contests, UI/UX battles, and tech quizzes. Showcase your talents and win prizes!",
+            icon: Trophy,
+            image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=2090&auto=format&fit=crop",
+            className: "h-full"
         }
     ]
 };
@@ -69,7 +128,25 @@ export const getInvolvedData = {
 // --- Goal Section Data ---
 export const goalSectionData = {
     title: "Goals",
-    subtitle: "What we strive to achieve"
+    subtitle: "What we strive to achieve",
+    goals: [
+        {
+            title: "Ethical Development",
+            description: "Promotes scholarly endeavors for the promotion of moral, social, cultural, and environmental interests."
+        },
+        {
+            title: "Career",
+            description: "Meets the demands of the industry in terms of technical, personal and interpersonal skills."
+        },
+        {
+            title: "Resource Optimization",
+            description: "Optimizes the use of appropriate and advanced resources and services."
+        },
+        {
+            title: "Research",
+            description: "Conducts intellectual, technological and significant researches in computing."
+        }
+    ]
 };
 
 // --- Institutional Identity Data ---
@@ -182,33 +259,82 @@ export const upcomingEventsData = {
 export const pastEventsData = {
     header: {
         title: "Past Events",
-        year: "2024"
+        year: "2025"
     },
     events: [
         {
             id: 1,
-            title: "60th Year of UC Intramurals",
+            title: "CCS Orientation 2025",
             location: "University of Cebu Main Campus",
-            date: { month: "November", day: "20" },
-            description: "One of the most awaited events of every UCLan is the annual celebration of Intramurals, and this year is no other. An event where all college departments battle each other to stand above the rest; an event that allows UCLanians to showcase their talents and skills...",
-            image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop",
+            date: { month: "August", day: "20" },
+            description: "The College of Computer Studies (CCS) at the University of Cebu Main Campus warmly welcomed its new batch of students during the CCS Orientation 2025 held on August 20, 2025. The event was designed to introduce freshmen to the college's programs, faculty, and student organizations.",
+            image: Orientation,
         },
         {
             id: 2,
-            title: "CCS Acquaintance Party: A Night of Elegance",
+            title: "11th ICT Congress 2025",
             location: "SM Seaside City Cebu",
-            date: { month: "November", day: "16" },
-            description: "On November 16, 2024, the CCS Acquaintance Party brought together students, faculty, and alumni at SM Seaside City Cebu for a night inspired by the timeless allure of the Old Money theme.",
-            image: "https://images.unsplash.com/photo-1540575861501-7ce0e22022f9?q=80&w=2070&auto=format&fit=crop",
+            date: { month: "April", day: "12" },
+            description: "The 11th ICT Congress 2025 at SM Seaside City Cebu was a landmark event that brought together IT enthusiasts, professionals, and students from across the region. The congress featured a series of keynote speeches, panel discussions, and workshops focused on the latest trends and innovations in information and communication technology.",
+            image: ICT,
         },
         {
             id: 3,
-            title: "10th ICT Congress",
-            location: "SM Seaside City Cebu",
-            date: { month: "April", day: "12" },
-            description: "At the 10th ICT Congress 2024, UC CCS students took over SM Seaside's Sky Hall with pure energy, coding battles, groundbreaking ideas, and next-level Tech talks. The day was packed with powerful discussions on AI, cybersecurity, digital transformation, and the...",
-            image: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?q=80&w=2069&auto=format&fit=crop",
+            title: "CCS Days",
+            location: "University of Cebu Main Campus",
+            date: { month: "February", day: "12" },
+            description: "CCS Days at the University of Cebu Main Campus was a vibrant celebration of technology, creativity, and community spirit. The event spanned several days and featured a variety of activities including coding competitions, hackathons, tech talks, and exhibitions showcasing student projects.",
+            image: CCSDays,
         },
+        {
+            id: 4,
+            title: "Cebu Blockchain Conference 2025",
+            location: "IEC Convention Center Cebu",
+            date: { month: "January", day: "17" },
+            description: "The Cebu Blockchain Conference 2025 held at the IEC Convention Center Cebu was a groundbreaking event that delved into the transformative potential of blockchain technology. The conference attracted industry leaders, developers, entrepreneurs, and enthusiasts eager to explore the applications and implications of blockchain across various sectors.",
+            image: Blockchain,
+        },
+        {
+            id: 5,
+            title: "Nihonggo Culminating Activity 2024",
+            location: "University of Cebu Main Campus",
+            date: { month: "December", day: "17" },
+            description: "The Nihonggo Culminating Activity 2024 at the University of Cebu Main Campus was a festive event that marked the conclusion of the Nihonggo language program for the year. The activity showcased the progress and achievements of students who had been studying the Japanese language and culture throughout the semester.",
+            image: Nihonggo,
+        },
+         {
+            id: 6,
+            title: "Embedded Systems and IOT Project Exhibit 2024",
+            location: "University of Cebu Main Campus",
+            date: { month: "November", day: "17" },
+            description: "The Embedded Systems and IoT Project Exhibit 2024 at the University of Cebu Main Campus was an exciting event that highlighted the innovative projects developed by students in the fields of embedded systems and the Internet of Things (IoT). The exhibit provided a platform for students to showcase their creativity, technical skills, and problem-solving abilities.",
+            image: EmbeddedSystems,
+        },
+        {
+            id: 7,
+            title: "UC CCS Cares and Internship 2024",
+            location: "University of Cebu Main Campus",
+            date: { month: "November", day: "17" },
+            description: "The UC CCS Cares and Internship 2024 program at the University of Cebu Main Campus was a commendable initiative that combined community service with practical work experience for students. The program aimed to foster a sense of social responsibility among students while providing them with valuable insights into their future careers.",
+            image: UCCCSCares,
+        },
+        {
+            id: 8,
+            title: "UC Intramurals",
+            location: "University of Cebu Main Campus",
+            date: { month: "November", day: "20" },
+            description: "The UC Intramurals at the University of Cebu Main Campus was a lively event that brought together students from various departments to compete in a range of sports and recreational activities. The intramurals fostered camaraderie, sportsmanship, and school spirit among participants and spectators alike.",
+            image: UCIntramurals,
+        },
+        {
+            id: 9,
+            title: "CCS Acquaintance Party 2024",
+            location: "SM Seaside City Cebu",
+            date: { month: "November", day: "16" },
+            description: "On November 16, 2024, the CCS Acquaintance Party brought together students, faculty, and alumni at SM Seaside City Cebu for a night inspired by the timeless allure of the Old Money theme. The event was a celebration of camaraderie, elegance, and the rich heritage of the College of Computer Studies (CCS) community.",
+            image: CCSAcquaintance,
+        },
+        
     ]
 };
 // --- Organization Section Data ---
@@ -261,33 +387,165 @@ export const organizationSectionData: OrganizationSectionData = {
             image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop",
             advisors: [
                 {
-                    name: "Dr. Jane Doe",
-                    role: "Chief Advisor",
-                    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop",
+                    name: "Engr. Dennis Durano",
+                    role: "PSITS Adviser",
+                    image: Dennis,
+                    socials: { email: "jane@example.com" }
+                },
+                {
+                    name: "Jia Nova B. Montecino",
+                    role: "PSITS Adviser",
+                    image: Jia,
                     socials: { email: "jane@example.com" }
                 }
             ],
             officers: [
                 {
-                    name: "Jacinth Cedric Barral",
+                    name: "Marlou Tadlip",
                     role: "President",
-                    image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1974&auto=format&fit=crop",
+                    image: Tadlip,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
+                {
+                    name: "Clint Louie Tuyor",
+                    role: "Vice President Internal",
+                    image: Tuyor,
+                    socials: { email: "james@example.com", github: "james" }
+                },
+                 {
+                    name: "Ralph Theodore Alon",
+                    role: "Vice President External",
+                    image: Alon,
                     socials: { email: "jacinth@example.com", github: "jacinth" }
                 },
                 {
                     name: "James Doe",
-                    role: "Vice President",
-                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop",
+                    role: "Secretary",
+                    image: Alon,
                     socials: { email: "james@example.com", github: "james" }
-                }
+                },
+                {
+                    name: "Khrysha Español",
+                    role: "Assistant Treasurer",
+                    image: Español,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
+                {
+                    name: "Raiza Mae Peresores",
+                    role: "Auditor",
+                    image: Peresores,
+                    socials: { email: "james@example.com", github: "james" }
+                },
+                {
+                    name: "Daisy Lyn Laygan",
+                    role: "Treasurer",
+                    image: Laygan,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
+                {
+                    name: "Kisses Peñera",
+                    role: "Chief Volunteer",
+                    image: Penera,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
+                {
+                    name: "Angela Postrero",
+                    role: "Public Information Officer",
+                    image: Postrero,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
+                {
+                    name: "Vince Bryant Cabunilas",
+                    role: "Public Relations Officer",
+                    image: Cabunilas,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
+                {
+                    name: "Jamaica Esgana",
+                    role: "First Year Representative",
+                    image: Penera,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
+                {
+                    name: "Lee Vincent Laurito",
+                    role: "Second Year Representative",
+                    image: Laurito,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
+                {
+                    name: "Christ Hanzen Rallos",
+                    role: "Third Year Representative",
+                    image: Rallos,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
+                {
+                    name: "Princess Villanueva",
+                    role: "Fourth Year Representative",
+                    image: Villanueva,
+                    socials: { email: "jacinth@example.com", github: "jacinth" }
+                },
             ],
             developers: [
                 {
-                    name: "John Smith",
-                    role: "Lead Developer",
-                    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop",
+                    name: "Anton James Genabio",
+                    role: "Former Head Developer",
+                    image: Genabio,
                     socials: { github: "johnsmith" }
-                }
+                },
+                {
+                    name: "Marriane Joy Napisa",
+                    role: "Project Manager",
+                    image: Napisa,
+                    socials: { github: "johnsmith" }
+                },
+                {
+                    name: "Ralph Adriane Dilao",
+                    role: "Lead Developer",
+                    image: Dilao,
+                    socials: { github: "johnsmith" }
+                },
+                {
+                    name: "Vince Clave Igot",
+                    role: "Fullstack Developer",
+                    image: Igot,
+                    socials: { github: "johnsmith" }
+                },
+                {
+                    name: "Ram Riley Alin",
+                    role: "Backend Developer",
+                    image: Alin,
+                    socials: { github: "johnsmith" }
+                },
+                {
+                    name: "Jacinth Cedric Barral",
+                    role: "Backend Developer",
+                    image: Barral,
+                    socials: { github: "johnsmith" }
+                },
+                {
+                    name: "Jan Lorenz Laroco",
+                    role: "Frontend Developer",
+                    image: Laroco,
+                    socials: { github: "johnsmith" }
+                },
+                {
+                    name: "Froilan Kim Edem",
+                    role: "Fullstack Developer",
+                    image: Barral,
+                    socials: { github: "johnsmith" }
+                },
+                {
+                    name: "Arvin Albeos",
+                    role: "Quality Assurance",
+                    image: Albeos,
+                    socials: { github: "johnsmith" }
+                },
+                {
+                    name: "Luke Harvey Umpad",
+                    role: "UI/UX Designer",
+                    image: Barral,
+                    socials: { github: "johnsmith" }
+                },
             ],
             volunteers: [
                 {
