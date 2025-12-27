@@ -3,7 +3,7 @@ import { CoreValuesSection } from '@/components/sections/core-values/CoreValuesS
 import { DeansMessageSection } from '@/components/sections/deans-message/DeansMessageSection';
 // import { Header } from "@/components/common/Header";
 import { GetInvolvedSection } from '@/components/sections/get-involved/GetInvolvedSection';
-import { GoalSection } from '@/components/sections/goals/GoalSection';
+import GoalsSection from '@/components/sections/goals/GoalSection';
 import { InstitutionalIdentitySection } from '@/components/sections/institutional-identity/InstitutionalIdentitySection';
 
 export const Home = () => {
@@ -14,7 +14,7 @@ export const Home = () => {
       <DeansMessageSection />
       <InstitutionalIdentitySection department="uc" />
       <InstitutionalIdentitySection department="ccs" />
-      <GoalSection />
+      <GoalsSection />
       <CoreValuesSection />
       <GetInvolvedSection />
     </>

@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { organizationSectionData, type Member } from '@/data/sections-data';
 import { OptimizedImage } from '@/components/common/OptimizedImage';
 
-export const OrganizationSection = () => {
+export default function OrganizationSection() {
   return (
     <section className="relative w-full py-20 md:py-32 lg:py-48 overflow-hidden bg-background">
       <div className="container relative z-10 px-4 md:px-6">

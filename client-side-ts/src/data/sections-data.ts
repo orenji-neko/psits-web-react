@@ -23,8 +23,6 @@ import Barral from '../assets/Development Team 2025/22.png';
 import Laroco from '../assets/Development Team 2025/21.png';
 import Albeos from '../assets/Development Team 2025/23.png';
 
-import aiLab from '../assets/aiLab.jpg';
-
 import Orientation from '../assets/orientation2025/1.jpg';
 import ICT from '../assets/ict-congress/1.jpg';
 import Blockchain from '../assets/cbc/1.jpg';
