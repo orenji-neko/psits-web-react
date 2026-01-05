@@ -312,8 +312,8 @@ export const updateMerchandiseController = async (
     const imagesToRemove = Array.isArray(removeImage)
       ? removeImage
       : removeImage
-      ? [removeImage]
-      : [];
+        ? [removeImage]
+        : [];
 
     const imageKeys = imagesToRemove.length
       ? imagesToRemove.map((url) => url.replace(process.env.bucketUrl, ""))

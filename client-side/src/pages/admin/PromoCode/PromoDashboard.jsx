@@ -127,21 +127,21 @@ const PromoDashboard = () => {
       label: "Status",
       cell: (row) => (
         <div
-          className={`inline-block px-3 py-1 rounded-full font-semibold text-sm ${
+          className={`inline-block rounded-full px-3 py-1 text-sm font-semibold ${
             current >= new Date(row.start_date) &&
             current <= new Date(row.end_date)
               ? "bg-green-100 text-green-800"
               : current < new Date(row.start_date)
-              ? "bg-yellow-100 text-yellow-800"
-              : "bg-red-100 text-red-800"
+                ? "bg-yellow-100 text-yellow-800"
+                : "bg-red-100 text-red-800"
           }`}
         >
           {current >= new Date(row.start_date) &&
           current <= new Date(row.end_date)
             ? "Active"
             : current < new Date(row.start_date)
-            ? "Upcoming"
-            : "Expired"}
+              ? "Upcoming"
+              : "Expired"}
         </div>
       ),
     },
@@ -153,19 +153,19 @@ const PromoDashboard = () => {
         <ButtonsComponent>
           <button
             onClick={() => handleEditModal(row)}
-            className="ml-2 text-blue-500 hover:text-blue-700 transition-colors duration-200"
+            className="ml-2 text-blue-500 transition-colors duration-200 hover:text-blue-700"
           >
             <FaPen />
           </button>
           <button
             onClick={() => handleView(row)}
-            className="ml-2 text-blue-500 hover:text-blue-700 transition-colors duration-200"
+            className="ml-2 text-blue-500 transition-colors duration-200 hover:text-blue-700"
           >
             <FaEye />
           </button>
           <button
             onClick={() => handleDelete(row._id)}
-            className="ml-2 text-red-500 hover:text-red-700 transition-colors duration-200"
+            className="ml-2 text-red-500 transition-colors duration-200 hover:text-red-700"
           >
             <FaTrash />
           </button>
@@ -177,12 +177,12 @@ const PromoDashboard = () => {
   return (
     <>
       <div>
-        <div className="p-2 mb-5">
+        <div className="mb-5 p-2">
           <ButtonsComponent>
             <motion.button
               whileHover={{ scale: 1.05, backgroundColor: "#0056b3" }} // Hover effect for primary
               whileTap={{ scale: 0.98, backgroundColor: "#003d7a" }} // Active effect for primary
-              className="text-sm md:text-base bg-accent text-white flex items-center gap-2 px-5 py-2 border border-neutral-medium rounded-lg shadow-sm hover:shadow-md transition ease-in-out duration-150 focus:outline-none focus:ring-2 focus:ring-highlight"
+              className="flex items-center gap-2 rounded-lg border border-neutral-medium bg-accent px-5 py-2 text-sm text-white shadow-sm transition duration-150 ease-in-out hover:shadow-md focus:outline-none focus:ring-2 focus:ring-highlight md:text-base"
               onClick={handleViewAddModal}
             >
               <i className="fas fa-plus text-white"></i>
@@ -191,7 +191,7 @@ const PromoDashboard = () => {
             <motion.button
               whileHover={{ scale: 1.05, backgroundColor: "#1f2937" }}
               whileTap={{ scale: 0.98, backgroundColor: "#111827" }}
-              className="text-sm md:text-base bg-gray-700 text-white flex items-center gap-2 px-5 py-2 border border-gray-500 rounded-lg shadow-sm hover:shadow-md transition ease-in-out duration-150 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="flex items-center gap-2 rounded-lg border border-gray-500 bg-gray-700 px-5 py-2 text-sm text-white shadow-sm transition duration-150 ease-in-out hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 md:text-base"
               onClick={() => handleViewLogsModal()}
             >
               <i className="fas fa-file-alt text-white"></i>

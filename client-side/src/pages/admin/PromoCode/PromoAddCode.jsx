@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { activePublishMerchandise, fetchStudentName } from "../../../api/admin";
 import ConfirmationModal from "../../../components/common/modal/ConfirmationModal";
 import { ConfirmActionType } from "../../../enums/commonEnums";
@@ -32,6 +32,7 @@ const PromoAddCode = ({ onCancel }) => {
       console.log(data);
     } catch (error) {
       console.error(error);
+      onCancel();
     }
   };
 
@@ -81,8 +82,8 @@ const PromoAddCode = ({ onCancel }) => {
       type === "Members"
         ? selectedMembers
         : studentType === "Specific"
-        ? selectedStudents
-        : "All Students";
+          ? selectedStudents
+          : "All Students";
     const formFields = {
       promoName,
       type: type === "Members" ? type : studentType,
@@ -129,20 +130,20 @@ const PromoAddCode = ({ onCancel }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-lg p-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="w-full max-w-lg space-y-4 rounded-2xl bg-white p-6 shadow-lg">
+        <h2 className="text-center text-xl font-semibold text-gray-800">
           Add Promo Code
         </h2>
 
         {/* Promo Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
+          <label className="mb-1 block text-sm font-medium text-gray-600">
             Promo Name
           </label>
           <input
             type="text"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring focus:ring-blue-200"
             placeholder="Enter promo name"
             value={promoName}
             onChange={(e) => setPromoName(e.target.value)}
@@ -151,11 +152,11 @@ const PromoAddCode = ({ onCancel }) => {
 
         {/* Type Dropdown */}
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
+          <label className="mb-1 block text-sm font-medium text-gray-600">
             Type
           </label>
           <select
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring focus:ring-blue-200"
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
@@ -166,11 +167,11 @@ const PromoAddCode = ({ onCancel }) => {
           </select>
           {type === "Students" && (
             <>
-              <label className="block text-sm font-medium text-gray-600 mb-1 mt-2">
+              <label className="mb-1 mt-2 block text-sm font-medium text-gray-600">
                 Type of Students
               </label>
               <select
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring focus:ring-blue-200"
                 value={studentType}
                 onChange={(e) => setStudentType(e.target.value)}
               >
@@ -186,19 +187,19 @@ const PromoAddCode = ({ onCancel }) => {
         {/* Conditional Fields */}
         {studentType === "Specific" && (
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-600">
               Search Student by ID
             </label>
-            <div className="flex flex-row gap-3 mb-4">
+            <div className="mb-4 flex flex-row gap-3">
               <input
                 type="number"
                 placeholder="e.g. 2021001"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring focus:ring-blue-200"
                 value={searchStudentId}
                 onChange={(e) => setSearchStudentId(e.target.value)}
               />
               <button
-                className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
                 onClick={() => handleSearchStudent()}
               >
                 Search
@@ -206,7 +207,7 @@ const PromoAddCode = ({ onCancel }) => {
               {studentSearched.data !== undefined && (
                 <>
                   <button
-                    className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
+                    className="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
                     onClick={() => handleAddStudent()}
                   >
                     Add
@@ -231,12 +232,12 @@ const PromoAddCode = ({ onCancel }) => {
               </>
             )}
 
-            <div className="w-full border border-gray-300 rounded-md px-3 py-2 min-h-[42px] flex flex-wrap gap-2 bg-white">
+            <div className="flex min-h-[42px] w-full flex-wrap gap-2 rounded-md border border-gray-300 bg-white px-3 py-2">
               {selectedStudents.length > 0 ? (
                 selectedStudents.map((student, index) => (
                   <span
                     key={index}
-                    className="flex items-center bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm"
+                    className="flex items-center rounded-full bg-blue-100 px-2 py-1 text-sm text-blue-700"
                   >
                     {student}
                     <button
@@ -253,7 +254,7 @@ const PromoAddCode = ({ onCancel }) => {
                   </span>
                 ))
               ) : (
-                <span className="text-gray-400 text-sm">
+                <span className="text-sm text-gray-400">
                   No students selected
                 </span>
               )}
@@ -263,7 +264,7 @@ const PromoAddCode = ({ onCancel }) => {
 
         {type === "Members" && (
           <div>
-            <p className="block text-sm font-medium text-gray-600 mb-1">
+            <p className="mb-1 block text-sm font-medium text-gray-600">
               Sub Members
             </p>
             <div className="flex flex-wrap gap-3">
@@ -275,7 +276,7 @@ const PromoAddCode = ({ onCancel }) => {
                     onChange={() => handleOrgChange(org)}
                     className="accent-blue-600"
                   />
-                  <span className="text-gray-700 text-sm">{org}</span>
+                  <span className="text-sm text-gray-700">{org}</span>
                 </label>
               ))}
             </div>
@@ -284,7 +285,7 @@ const PromoAddCode = ({ onCancel }) => {
 
         {/* Limited / Unlimited */}
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
+          <label className="mb-1 block text-sm font-medium text-gray-600">
             Limit Type
           </label>
           <div className="flex gap-4">
@@ -298,18 +299,18 @@ const PromoAddCode = ({ onCancel }) => {
                   onChange={() => setLimitType(option)}
                   className="accent-blue-600"
                 />
-                <span className="text-gray-700 text-sm">{option}</span>
+                <span className="text-sm text-gray-700">{option}</span>
               </label>
             ))}
           </div>
         </div>
         {limitType === "Limited" && (
           <>
-            <label className="block text-sm font-medium text-gray-600 mb-1 mt-2">
+            <label className="mb-1 mt-2 block text-sm font-medium text-gray-600">
               Single Student?
             </label>
             <select
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring focus:ring-blue-200"
               value={singleStudent}
               onChange={(e) => setSingleStudent(e.target.value)}
             >
@@ -323,12 +324,12 @@ const PromoAddCode = ({ onCancel }) => {
         {/* Quantity */}
         {limitType === "Limited" && (
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-600">
               Quantity
             </label>
             <input
               type="number"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring focus:ring-blue-200"
               placeholder="Enter quantity"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
@@ -338,7 +339,7 @@ const PromoAddCode = ({ onCancel }) => {
 
         {/* Merchandise */}
         <div>
-          <p className="block text-sm font-medium text-gray-600 mb-1">
+          <p className="mb-1 block text-sm font-medium text-gray-600">
             Applied Merchandise
           </p>
           <div className="grid grid-cols-2 gap-2">
@@ -350,7 +351,7 @@ const PromoAddCode = ({ onCancel }) => {
                   onChange={() => handleMerchChange(item)}
                   className="accent-blue-600"
                 />
-                <span className="text-gray-700 text-sm">{item.name}</span>
+                <span className="text-sm text-gray-700">{item.name}</span>
               </label>
             ))}
           </div>
@@ -359,23 +360,23 @@ const PromoAddCode = ({ onCancel }) => {
         {/* Dates */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-600">
               Start Date
             </label>
             <input
               type="date"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring focus:ring-blue-200"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-600">
               Expiry Date
             </label>
             <input
               type="date"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring focus:ring-blue-200"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
             />
@@ -384,13 +385,13 @@ const PromoAddCode = ({ onCancel }) => {
 
         {/* Discount */}
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
+          <label className="mb-1 block text-sm font-medium text-gray-600">
             Discount (%)
           </label>
           <input
             type="number"
             placeholder="Enter discount percentage"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring focus:ring-blue-200"
             value={discount}
             onChange={(e) => setDiscount(e.target.value)}
           />
@@ -399,13 +400,13 @@ const PromoAddCode = ({ onCancel }) => {
         {/* Buttons */}
         <div className="flex justify-end gap-3 pt-3">
           <button
-            className="px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100"
+            className="rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100"
             onClick={onCancel}
           >
             Cancel
           </button>
           <button
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+            className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             onClick={() => setConfirmModal(true)}
           >
             Create Promo Code
