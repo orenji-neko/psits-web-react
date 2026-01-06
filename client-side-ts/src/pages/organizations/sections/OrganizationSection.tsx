@@ -1,8 +1,8 @@
-import { CardTitle } from "../ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel"
-import { organizationSectionData, type Member } from "@/data/sections-data"
-import { OptimizedImage } from "@/components/common/OptimizedImage"
+import { CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import { organizationSectionData, type Member } from "@/data"
+
 
 export default function OrganizationSection() {
 
@@ -90,7 +90,7 @@ const MemberCarousel = ({ members, title }: { members: Member[]; title: string }
                 <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
                 {/* Right fade gradient */}
                 <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-                
+
                 <Carousel
                     opts={{
                         align: "center",
@@ -115,7 +115,7 @@ const MemberCarousel = ({ members, title }: { members: Member[]; title: string }
                             </CarouselItem>
                         ))}
                     </CarouselContent>
-                    
+
                     {/* Navigation arrows */}
                     <CarouselPrevious className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 shadow-lg" />
                     <CarouselNext className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 shadow-lg" />

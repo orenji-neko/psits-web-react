@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 import { useRef, useEffect, useState, useCallback } from "react"
-import { getInvolvedData } from "@/data/sections-data"
+import { getInvolvedData } from "@/data"
 import { GetInvolvedCard } from "./GetInvolvedCard"
 
 export const GetInvolvedSection = () => {
@@ -13,7 +13,7 @@ export const GetInvolvedSection = () => {
   const calculateMaxScroll = useCallback(() => {
     const lg = window.innerWidth >= 1024
     setIsLg(lg)
-    
+
     if (cardsRef.current && lg) {
       // Visible area = viewport height minus padding (py-20 = 80px * 2)
       const visibleHeight = window.innerHeight - 160
@@ -32,15 +32,15 @@ export const GetInvolvedSection = () => {
   useEffect(() => {
     // Delay initial calculation to ensure DOM is ready
     const timeout = setTimeout(calculateMaxScroll, 100)
-    
+
     window.addEventListener("resize", calculateMaxScroll)
-    
+
     // Watch for content changes
     const observer = new ResizeObserver(calculateMaxScroll)
     if (cardsRef.current) {
       observer.observe(cardsRef.current)
     }
-    
+
     return () => {
       clearTimeout(timeout)
       window.removeEventListener("resize", calculateMaxScroll)
@@ -51,17 +51,17 @@ export const GetInvolvedSection = () => {
   // Handle scroll
   useEffect(() => {
     if (!isLg || maxScroll === 0) return
-    
+
     const onScroll = () => {
       if (!sectionRef.current) return
       const rect = sectionRef.current.getBoundingClientRect()
       const progress = Math.min(Math.max(-rect.top, 0), maxScroll)
       setScrollY(progress)
     }
-    
+
     window.addEventListener("scroll", onScroll, { passive: true })
     onScroll() // Call once to set initial position
-    
+
     return () => window.removeEventListener("scroll", onScroll)
   }, [maxScroll, isLg])
 

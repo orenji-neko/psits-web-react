@@ -5,7 +5,7 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel';
 import { Calendar, MapPin } from 'lucide-react';
-import { upcomingEventsData } from '@/data/sections-data';
+import { upcomingEventsData, type UpcomingEvent } from '@/data';
 import { OptimizedImage } from '@/components/common/OptimizedImage';
 
 export const UpcomingEventsSection = () => {
@@ -27,7 +27,7 @@ export const UpcomingEventsSection = () => {
           className="w-full"
         >
           <CarouselContent className="-ml-4">
-            {events.map(event => (
+            {events.map((event: UpcomingEvent) => (
               <CarouselItem
                 key={event.id}
                 className="pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"

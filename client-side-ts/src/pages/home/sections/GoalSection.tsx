@@ -1,5 +1,5 @@
 
-import { goalSectionData } from "@/data/sections-data"
+import { goalSectionData } from "@/data"
 import { motion } from "framer-motion"
 
 export default function GoalSection() {
@@ -12,7 +12,7 @@ export default function GoalSection() {
 
             <div className="container mx-auto px-4 md:px-6">
                 {/* Header */}
-                <motion.div 
+                <motion.div
                     className="text-center space-y-2 mb-16"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -30,8 +30,8 @@ export default function GoalSection() {
                 {/* Timeline */}
                 <div className="max-w-4xl mx-auto">
                     {goalSectionData.goals.map((goal, index) => (
-                        <motion.div 
-                            key={index} 
+                        <motion.div
+                            key={index}
                             className="flex items-start gap-4 md:gap-17"
                             initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -39,7 +39,7 @@ export default function GoalSection() {
                             transition={{ duration: 0.5, delay: index * 0.15 }}
                         >
                             {/* Left side - Title */}
-                            <motion.div 
+                            <motion.div
                                 className="flex-1 text-right "
                                 initial={{ opacity: 0, x: -30 }}
                                 whileInView={{ opacity: 1, x: 0 }}
@@ -54,7 +54,7 @@ export default function GoalSection() {
                             {/* Center - Timeline */}
                             <div className="flex flex-col items-center">
                                 {/* Dot */}
-                                <motion.div 
+                                <motion.div
                                     className={`w-4 h-4 rounded-full shrink-0   ${index === 0 ? 'bg-primary ' : 'bg-muted-foreground/40'}`}
                                     initial={{ scale: 0 }}
                                     whileInView={{ scale: 1 }}
@@ -63,7 +63,7 @@ export default function GoalSection() {
                                 />
                                 {/* Line */}
                                 {index < goalSectionData.goals.length - 1 && (
-                                    <motion.div 
+                                    <motion.div
                                         className="w-0.5 bg-primary/30 origin-top"
                                         initial={{ scaleY: 0, height: 96 }}
                                         whileInView={{ scaleY: 1 }}
@@ -75,7 +75,7 @@ export default function GoalSection() {
                             </div>
 
                             {/* Right side - Description */}
-                            <motion.div 
+                            <motion.div
                                 className="flex-1 "
                                 initial={{ opacity: 0, x: 30 }}
                                 whileInView={{ opacity: 1, x: 0 }}

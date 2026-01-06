@@ -6,7 +6,7 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 
-import { coreValuesData } from '@/data/sections-data';
+import { coreValuesData } from '@/data';
 
 export const CoreValuesSection = () => {
   return (

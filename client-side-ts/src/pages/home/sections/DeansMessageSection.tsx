@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import dean from '@/assets/dean.png';
-import { deansMessageData } from '@/data/sections-data';
+import { deansMessageData } from '@/data';
 import { OptimizedImage } from '@/components/common/OptimizedImage';
 
 export const DeansMessageSection = () => {

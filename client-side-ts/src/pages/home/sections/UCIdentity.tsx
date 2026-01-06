@@ -1,5 +1,5 @@
 import { InsitutionalIdentityContent } from './InsitutionalIdentityContent';
-import type { UCData } from '@/data/sections-data';
+import type { UCData } from '@/data';
 
 interface Props {
   data: UCData;

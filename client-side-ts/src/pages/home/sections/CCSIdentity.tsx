@@ -1,10 +1,10 @@
-import type { CCSData } from '@/data/sections-data';
+import type { CCSData } from '@/data';
 import imageLogo from '@/assets/ccsidentity.png';
 import aiLab from "@/assets/aiLab.jpg";
 import announcement from '@/assets/announcement.png';
 import { InsitutionalIdentityContent } from './InsitutionalIdentityContent';
 import { Card } from '@/components/ui/card';
-import { OptimizedImage } from '../../common/OptimizedImage';
+import { OptimizedImage } from '@/components/common/OptimizedImage';
 
 interface Props {
   data: CCSData;

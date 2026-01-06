@@ -1,6 +1,6 @@
 import { CCSIdentity } from './CCSIdentity';
 import { UCIdentity } from './UCIdentity';
-import { institutionalIdentityData } from '@/data/sections-data';
+import { institutionalIdentityData } from '@/data';
 
 interface Props {
   department: 'uc' | 'ccs';

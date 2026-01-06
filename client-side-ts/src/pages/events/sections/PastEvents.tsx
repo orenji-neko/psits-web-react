@@ -1,6 +1,6 @@
 import { MapPin, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { pastEventsData } from '@/data/sections-data';
+import { pastEventsData, type PastEvent } from '@/data';
 import { OptimizedImage } from '@/components/common/OptimizedImage';
 
 export const PastEvents = () => {
@@ -24,7 +24,7 @@ export const PastEvents = () => {
       </div>
 
       <div className="space-y-20">
-        {events.map(event => (
+        {events.map((event: PastEvent) => (
           <div
             key={event.id}
             className="flex flex-col md:flex-row gap-8 md:gap-12 group"

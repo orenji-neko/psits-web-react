@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import banner from '@/assets/banner.png';
-import { homeBannerData } from '@/data/sections-data';
+import { homeBannerData } from '@/data';
 import { OptimizedImage } from '@/components/common/OptimizedImage';
 
 export const HomeBanner = () => {
