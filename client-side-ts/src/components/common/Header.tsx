@@ -16,7 +16,7 @@ const navLinks = [
   { name: 'Events', href: '/events' },
   { name: 'Organizations', href: '/organizations' },
   { name: 'Resources', href: '/resources' },
-  { name: 'Shop', href: '/shop', hasDropdown: true },
+  { name: 'Shop', href: '/shop', hasDropdown: false },
 ];
 
 export const Header = () => {
@@ -111,10 +111,10 @@ export const Header = () => {
         {/* Right Section: Cart and Sign In */}
         <div className="flex items-center gap-2 md:gap-4">
           {/* Cart */}
-          <button className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors rounded-full hover:bg-gray-50">
+          <Link to="/cart" className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors rounded-full hover:bg-gray-50">
             <ShoppingCart size={20} />
             <span className="text-sm font-semibold hidden xl:inline">Cart</span>
-          </button>
+          </Link>
 
           {/* Join Us Button */}
           <Button
