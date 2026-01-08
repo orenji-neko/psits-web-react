@@ -1,5 +1,5 @@
-import type { SetNewPasswordCredentials } from '@/components/auth/SetNewPasswordForm';
-import SetNewPasswordForm from '@/components/auth/SetNewPasswordForm';
+import type { SetNewPasswordCredentials } from "@/components/auth/SetNewPasswordForm";
+import SetNewPasswordForm from "@/components/auth/SetNewPasswordForm";
 
 export default function SetNewPassword() {
   const handleSetNewPassword = (_values: SetNewPasswordCredentials) => {
@@ -7,8 +7,8 @@ export default function SetNewPassword() {
   };
 
   return (
-    <div className="w-screen h-screen bg-gray-300 flex flex-row">
-      <div className="w-full md:w-1/2 bg-white flex justify-center items-center">
+    <div className="flex h-screen w-screen flex-row bg-gray-300">
+      <div className="flex w-full items-center justify-center bg-white md:w-1/2">
         <SetNewPasswordForm onResetPassword={handleSetNewPassword} />
       </div>
     </div>

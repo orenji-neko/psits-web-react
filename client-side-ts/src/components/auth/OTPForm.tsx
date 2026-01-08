@@ -1,8 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import { Field } from '../ui/field';
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp';
+import { useState, useEffect } from "react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Field } from "../ui/field";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 
 export interface OTPFormProps {
   onVerify: (value: string) => void;
@@ -29,7 +36,7 @@ export default function OTPForm({ onVerify, onResend }: OTPFormProps) {
   // when verify button is clicked
   const handleVerify = () => {
     onVerify(code);
-  }
+  };
 
   // when resend button is clicked
   const handleResend = () => {
@@ -38,45 +45,49 @@ export default function OTPForm({ onVerify, onResend }: OTPFormProps) {
       setCountdown(59);
       setCode("");
     }
-  }
+  };
 
   return (
-    <Card className="w-full sm:max-w-md border-none shadow-none">
+    <Card className="w-full border-none shadow-none sm:max-w-md">
       <CardHeader className="space-y-2">
-        <CardTitle className="text-4xl font-semibold">Verification Code</CardTitle>
+        <CardTitle className="text-4xl font-semibold">
+          Verification Code
+        </CardTitle>
         <CardDescription>Enter the OTP code sent to your email</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className='w-full flex justify-center'>
+        <div className="flex w-full justify-center">
           <InputOTP maxLength={4} value={code} onChange={(v) => setCode(v)}>
-            <InputOTPGroup className='flex gap-4'>
-              <InputOTPSlot index={0} className='shadow-md w-13 h-13' />
-              <InputOTPSlot index={1} className='shadow-md w-13 h-13' />
-              <InputOTPSlot index={2} className='shadow-md w-13 h-13' />
-              <InputOTPSlot index={3} className='shadow-md w-13 h-13' />
+            <InputOTPGroup className="flex gap-4">
+              <InputOTPSlot index={0} className="h-13 w-13 shadow-md" />
+              <InputOTPSlot index={1} className="h-13 w-13 shadow-md" />
+              <InputOTPSlot index={2} className="h-13 w-13 shadow-md" />
+              <InputOTPSlot index={3} className="h-13 w-13 shadow-md" />
             </InputOTPGroup>
           </InputOTP>
         </div>
-        <div className="w-full text-sm font-extralight text-gray-300 flex justify-center items-center">
+        <div className="flex w-full items-center justify-center text-sm font-extralight text-gray-300">
           Didn't receive the code?&nbsp;
           {canResend ? (
-            <span 
-              className="text-black cursor-pointer hover:underline" 
+            <span
+              className="cursor-pointer text-black hover:underline"
               onClick={handleResend}
             >
               Resend
             </span>
           ) : (
-            <span className="text-black">
-              {countdown}s
-            </span>
+            <span className="text-black">{countdown}s</span>
           )}
         </div>
       </CardContent>
       <CardFooter>
         <Field orientation="vertical" className="w-full space-y-3">
-          <Button className="w-full" onClick={handleVerify}>Verify</Button>
-          <Button variant='outline' className="w-full">Back</Button>
+          <Button className="w-full" onClick={handleVerify}>
+            Verify
+          </Button>
+          <Button variant="outline" className="w-full">
+            Back
+          </Button>
         </Field>
       </CardFooter>
     </Card>

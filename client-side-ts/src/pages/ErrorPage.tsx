@@ -1,40 +1,40 @@
-import React from 'react';
-import { Link, useRouteError, isRouteErrorResponse } from 'react-router';
-import { AlertCircle, Home } from 'lucide-react';
-import { BackgroundText } from '@/components/common/BackgroundText';
+import React from "react";
+import { Link, useRouteError, isRouteErrorResponse } from "react-router";
+import { AlertCircle, Home } from "lucide-react";
+import { BackgroundText } from "@/components/common/BackgroundText";
 
 export const ErrorPage: React.FC = () => {
   const error = useRouteError();
 
-  let errorMessage: string = 'An unexpected error occurred.';
-  let errorTitle: string = 'Oops! Something went wrong.';
-  let statusCode: string | number = 'Error';
+  let errorMessage: string = "An unexpected error occurred.";
+  let errorTitle: string = "Oops! Something went wrong.";
+  let statusCode: string | number = "Error";
 
   if (isRouteErrorResponse(error)) {
     statusCode = error.status;
     if (error.status === 404) {
-      errorTitle = 'Page Not Found';
+      errorTitle = "Page Not Found";
       errorMessage = "Sorry, we couldn't find the page you're looking for.";
     } else {
-      errorTitle = error.statusText || 'Error';
-      errorMessage = error.data?.message || 'Something went wrong.';
+      errorTitle = error.statusText || "Error";
+      errorMessage = error.data?.message || "Something went wrong.";
     }
   } else if (error instanceof Error) {
     errorMessage = error.message;
     // @ts-ignore
     statusCode = error.status || 500;
-  } else if (typeof error === 'string') {
+  } else if (typeof error === "string") {
     errorMessage = error;
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background text-foreground animate-in fade-in duration-500 font-sans p-6 text-center select-none overflow-hidden relative">
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary-100/20 rounded-full blur-3xl opacity-50" />
+    <div className="bg-background text-foreground animate-in fade-in relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-6 text-center font-sans duration-500 select-none">
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="bg-primary-100/20 absolute top-1/2 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-3xl" />
       </div>
 
       <div className="relative mb-8">
-        <div className="rounded-full bg-red-50 p-6 inline-block ring-8 ring-red-50/50 shadow-sm animate-in zoom-in duration-300">
+        <div className="animate-in zoom-in inline-block rounded-full bg-red-50 p-6 shadow-sm ring-8 ring-red-50/50 duration-300">
           <AlertCircle className="h-16 w-16 text-red-500" />
         </div>
         {/* Background large text number */}
@@ -47,14 +47,14 @@ export const ErrorPage: React.FC = () => {
 
       <div className="z-10 max-w-lg space-y-4">
         <h2 className="text-4xl font-bold tracking-tight">{errorTitle}</h2>
-        <p className="text-lg text-muted-foreground leading-relaxed">
+        <p className="text-muted-foreground text-lg leading-relaxed">
           {errorMessage}
         </p>
 
         <div className="pt-8">
           <Link
             to="/"
-            className="btn btn-primary gap-2 shadow-lg hover:shadow-primary/25 hover:-translate-y-1 transition-all duration-300"
+            className="btn btn-primary hover:shadow-primary/25 gap-2 shadow-lg transition-all duration-300 hover:-translate-y-1"
           >
             <Home className="h-5 w-5" />
             Back to Home

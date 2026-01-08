@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router';
+import { useNavigate } from "react-router";
 import {
   FileText,
   UserCheck,
@@ -8,27 +8,27 @@ import {
   ExternalLink,
   Mail,
   ChevronLeft,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const TermsOfCondition = () => {
-  const lastUpdated = 'December 23, 2024';
+  const lastUpdated = "December 23, 2024";
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <main className="flex-grow container max-w-4xl py-12 md:py-20">
+    <div className="bg-background flex min-h-screen flex-col">
+      <main className="container max-w-4xl flex-grow py-12 md:py-20">
         <Button
           variant="ghost"
-          className="mb-8 -ml-4 text-muted-foreground hover:text-primary transition-colors"
+          className="text-muted-foreground hover:text-primary mb-8 -ml-4 transition-colors"
           onClick={() => navigate(-1)}
         >
-          <ChevronLeft className="h-4 w-4 mr-2" />
+          <ChevronLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
 
-        <div className="flex flex-col gap-2 mb-12">
-          <h1 className="heading-1 bg-gradient-to-r from-primary to-primary-700 bg-clip-text text-transparent">
+        <div className="mb-12 flex flex-col gap-2">
+          <h1 className="heading-1 from-primary to-primary-700 bg-gradient-to-r bg-clip-text text-transparent">
             Terms of Service
           </h1>
           <p className="info-text">Last Updated: {lastUpdated}</p>
@@ -37,8 +37,8 @@ export const TermsOfCondition = () => {
         <div className="space-y-12">
           <section className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <FileText className="h-5 w-5 text-primary" />
+              <div className="bg-primary/10 rounded-lg p-2">
+                <FileText className="text-primary h-5 w-5" />
               </div>
               <h2 className="heading-3 mb-0">1. Acceptance of Terms</h2>
             </div>
@@ -52,17 +52,17 @@ export const TermsOfCondition = () => {
 
           <section className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <UserCheck className="h-5 w-5 text-primary" />
+              <div className="bg-primary/10 rounded-lg p-2">
+                <UserCheck className="text-primary h-5 w-5" />
               </div>
               <h2 className="heading-3 mb-0">2. Membership & Registration</h2>
             </div>
-            <div className="space-y-4 body-text">
+            <div className="body-text space-y-4">
               <p>
                 To access certain features of the platform, you may be required
                 to register as a member.
               </p>
-              <ul className="list-disc pl-6 space-y-2">
+              <ul className="list-disc space-y-2 pl-6">
                 <li>
                   You must provide accurate and complete information during
                   registration.
@@ -81,8 +81,8 @@ export const TermsOfCondition = () => {
 
           <section className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <AlertCircle className="h-5 w-5 text-primary" />
+              <div className="bg-primary/10 rounded-lg p-2">
+                <AlertCircle className="text-primary h-5 w-5" />
               </div>
               <h2 className="heading-3 mb-0">3. User Conduct</h2>
             </div>
@@ -97,8 +97,8 @@ export const TermsOfCondition = () => {
 
           <section className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <PenTool className="h-5 w-5 text-primary" />
+              <div className="bg-primary/10 rounded-lg p-2">
+                <PenTool className="text-primary h-5 w-5" />
               </div>
               <h2 className="heading-3 mb-0">4. Intellectual Property</h2>
             </div>
@@ -113,8 +113,8 @@ export const TermsOfCondition = () => {
 
           <section className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Scale className="h-5 w-5 text-primary" />
+              <div className="bg-primary/10 rounded-lg p-2">
+                <Scale className="text-primary h-5 w-5" />
               </div>
               <h2 className="heading-3 mb-0">5. Limitation of Liability</h2>
             </div>
@@ -128,8 +128,8 @@ export const TermsOfCondition = () => {
 
           <section className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <ExternalLink className="h-5 w-5 text-primary" />
+              <div className="bg-primary/10 rounded-lg p-2">
+                <ExternalLink className="text-primary h-5 w-5" />
               </div>
               <h2 className="heading-3 mb-0">6. Third-Party Links</h2>
             </div>
@@ -141,7 +141,7 @@ export const TermsOfCondition = () => {
             </p>
           </section>
 
-          <section className="space-y-6 pt-6 border-t">
+          <section className="space-y-6 border-t pt-6">
             <div className="flex flex-col gap-4">
               <h2 className="heading-3 mb-0">Contact Information</h2>
               <p className="body-text">
@@ -149,8 +149,8 @@ export const TermsOfCondition = () => {
                 please contact the organization's leadership at:
               </p>
               <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-3 text-darker">
-                  <Mail className="h-4 w-4 text-primary" />
+                <div className="text-darker flex items-center gap-3">
+                  <Mail className="text-primary h-4 w-4" />
                   <span>legal.psits@example.com</span>
                 </div>
                 <div className="text-info-text italic">

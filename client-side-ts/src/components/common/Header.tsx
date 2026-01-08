@@ -1,22 +1,22 @@
-import { useState, useRef } from 'react';
-import { NavLink, Link, useLocation } from 'react-router';
-import { Menu, X, ChevronDown, ShoppingCart } from 'lucide-react';
+import { useState, useRef } from "react";
+import { NavLink, Link, useLocation } from "react-router";
+import { Menu, X, ChevronDown, ShoppingCart } from "lucide-react";
 import {
   motion,
   AnimatePresence,
   useScroll,
   useMotionValueEvent,
-} from 'framer-motion';
-import { cn } from '@/lib/utils';
-import logo from '@/assets/logo.png';
-import { Button } from '@/components/ui/button';
+} from "framer-motion";
+import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.png";
+import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'Events', href: '/events' },
-  { name: 'Organizations', href: '/organizations' },
-  { name: 'Resources', href: '/resources' },
-  { name: 'Shop', href: '/shop', hasDropdown: true },
+  { name: "Home", href: "/" },
+  { name: "Events", href: "/events" },
+  { name: "Organizations", href: "/organizations" },
+  { name: "Resources", href: "/resources" },
+  { name: "Shop", href: "/shop", hasDropdown: true },
 ];
 
 export const Header = () => {
@@ -26,9 +26,9 @@ export const Header = () => {
   const { scrollY } = useScroll();
   const lastScrollY = useRef(0);
   const location = useLocation();
-  const isStaticPage = ['/privacy', '/terms'].includes(location.pathname);
+  const isStaticPage = ["/privacy", "/terms"].includes(location.pathname);
 
-  useMotionValueEvent(scrollY, 'change', latest => {
+  useMotionValueEvent(scrollY, "change", (latest) => {
     if (isStaticPage) {
       setHidden(false);
       return;
@@ -46,8 +46,8 @@ export const Header = () => {
   return (
     <div
       className={cn(
-        'z-50 flex justify-center px-3 md:px-0 left-0 right-0 top-2 md:top-4',
-        isStaticPage ? 'absolute' : 'fixed'
+        "top-2 right-0 left-0 z-50 flex justify-center px-3 md:top-4 md:px-0",
+        isStaticPage ? "absolute" : "fixed"
       )}
     >
       <motion.nav
@@ -55,47 +55,47 @@ export const Header = () => {
           visible: { y: 0, opacity: 1 },
           hidden: { y: -100, opacity: 0 },
         }}
-        animate={hidden ? 'hidden' : 'visible'}
-        transition={{ duration: 0.35, ease: 'easeInOut' }}
+        animate={hidden ? "hidden" : "visible"}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
         className={cn(
-          'w-full max-w-7xl h-14 md:h-16 bg-white/95 backdrop-blur-md rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/50 px-4 md:px-6 flex items-center justify-between'
+          "flex h-14 w-full max-w-7xl items-center justify-between rounded-full border border-gray-100/50 bg-white/95 px-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-md md:h-16 md:px-6"
         )}
       >
         {/* Logo and Title */}
-        <Link to="/" className="flex items-center gap-3 shrink-0 group">
-          <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
+        <Link to="/" className="group flex shrink-0 items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center md:h-10 md:w-10">
             <motion.img
               src={logo}
               alt="PSITS Logo"
-              className="w-full h-full object-contain"
+              className="h-full w-full object-contain"
               whileHover={{ rotate: 10, scale: 1.05 }}
             />
           </div>
-          <div className="hidden lg:flex flex-col leading-tight">
-            <span className="font-extrabold text-[10px] md:text-sm text-gray-900 tracking-tight">
+          <div className="hidden flex-col leading-tight lg:flex">
+            <span className="text-[10px] font-extrabold tracking-tight text-gray-900 md:text-sm">
               PHILIPPINE SOCIETY OF INFORMATION
             </span>
-            <span className="font-extrabold text-[10px] md:text-sm text-gray-900 tracking-tight">
+            <span className="text-[10px] font-extrabold tracking-tight text-gray-900 md:text-sm">
               TECHNOLOGY STUDENTS
             </span>
           </div>
-          <span className="lg:hidden font-bold text-lg text-gray-900">
+          <span className="text-lg font-bold text-gray-900 lg:hidden">
             PSITS
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-1 xl:gap-4">
-          {navLinks.map(link => (
-            <div key={link.name} className="relative group">
+        <div className="hidden items-center gap-1 lg:flex xl:gap-4">
+          {navLinks.map((link) => (
+            <div key={link.name} className="group relative">
               <NavLink
                 to={link.href}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold transition-all duration-200 rounded-full',
+                    "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition-all duration-200",
                     isActive
-                      ? 'text-primary bg-primary/5'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ? "text-primary bg-primary/5"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   )
                 }
               >
@@ -111,22 +111,22 @@ export const Header = () => {
         {/* Right Section: Cart and Sign In */}
         <div className="flex items-center gap-2 md:gap-4">
           {/* Cart */}
-          <button className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors rounded-full hover:bg-gray-50">
+          <button className="flex items-center gap-2 rounded-full px-3 py-2 text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900">
             <ShoppingCart size={20} />
-            <span className="text-sm font-semibold hidden xl:inline">Cart</span>
+            <span className="hidden text-sm font-semibold xl:inline">Cart</span>
           </button>
 
           {/* Join Us Button */}
           <Button
             asChild
-            className="rounded-full h-9 px-4 md:px-5 bg-[#1c9dde] hover:bg-[#1c9dde]/90 text-white font-semibold shadow-md active:scale-95 transition-all"
+            className="h-9 rounded-full bg-[#1c9dde] px-4 font-semibold text-white shadow-md transition-all hover:bg-[#1c9dde]/90 active:scale-95 md:px-5"
           >
             <Link to="/auth/login">Sign in</Link>
           </Button>
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2 rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
+            className="rounded-full p-2 text-gray-600 transition-colors hover:bg-gray-100 lg:hidden"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -140,20 +140,20 @@ export const Header = () => {
               initial={{ opacity: 0, scale: 0.95, y: -20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
-              className="absolute top-full left-0 right-0 mt-4 mx-4 bg-white/95 backdrop-blur-xl border border-gray-100 rounded-3xl shadow-2xl lg:hidden overflow-hidden overflow-y-auto max-h-[80vh] z-[60]"
+              className="absolute top-full right-0 left-0 z-[60] mx-4 mt-4 max-h-[80vh] overflow-hidden overflow-y-auto rounded-3xl border border-gray-100 bg-white/95 shadow-2xl backdrop-blur-xl lg:hidden"
             >
-              <div className="flex flex-col p-4 gap-2">
-                {navLinks.map(link => (
+              <div className="flex flex-col gap-2 p-4">
+                {navLinks.map((link) => (
                   <NavLink
                     key={link.name}
                     to={link.href}
                     onClick={() => setIsOpen(false)}
                     className={({ isActive }) =>
                       cn(
-                        'flex items-center justify-between p-4 rounded-2xl transition-all duration-200',
+                        "flex items-center justify-between rounded-2xl p-4 transition-all duration-200",
                         isActive
-                          ? 'bg-primary/10 text-primary font-bold'
-                          : 'text-gray-600 hover:bg-gray-50'
+                          ? "bg-primary/10 text-primary font-bold"
+                          : "text-gray-600 hover:bg-gray-50"
                       )
                     }
                   >
@@ -162,14 +162,14 @@ export const Header = () => {
                       <ChevronDown
                         size={18}
                         className={cn(
-                          'transition-transform duration-200',
-                          'opacity-50'
+                          "transition-transform duration-200",
+                          "opacity-50"
                         )}
                       />
                     )}
                   </NavLink>
                 ))}
-                <div className="h-px bg-gray-100 my-2 mx-2" />
+                <div className="mx-2 my-2 h-px bg-gray-100" />
                 <div className="flex flex-col gap-2">
                   <Button
                     asChild
@@ -182,7 +182,7 @@ export const Header = () => {
                   </Button>
                   <Button
                     asChild
-                    className="w-full rounded-2xl py-6 text-base font-bold bg-[#1c9dde] shadow-xl"
+                    className="w-full rounded-2xl bg-[#1c9dde] py-6 text-base font-bold shadow-xl"
                   >
                     <Link to="/auth/signup" onClick={() => setIsOpen(false)}>
                       Join Us

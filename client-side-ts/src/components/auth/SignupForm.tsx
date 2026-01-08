@@ -1,5 +1,5 @@
-import { useForm } from '@tanstack/react-form';
-import * as z from 'zod';
+import { useForm } from "@tanstack/react-form";
+import * as z from "zod";
 import {
   Card,
   CardContent,
@@ -7,40 +7,40 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../ui/card';
+} from "../ui/card";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
   FieldSet,
-} from '../ui/field';
-import { Input } from '../ui/input';
+} from "../ui/field";
+import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import { Button } from '../ui/button';
-import { Link } from 'react-router';
+} from "../ui/select";
+import { Button } from "../ui/button";
+import { Link } from "react-router";
 
 const formSchema = z
   .object({
-    id: z.string().min(8, 'ID Number must at least be 8 digits.'),
-    lname: z.string().min(1, 'Last name is required'),
+    id: z.string().min(8, "ID Number must at least be 8 digits."),
+    lname: z.string().min(1, "Last name is required"),
     mname: z.string().optional(),
-    fname: z.string().min(1, 'First name is required'),
-    email: z.email({ error: 'Invalid email address' }),
-    course: z.string().min(1, 'Course is required'),
-    year: z.string().min(1, 'Year level is required'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
+    fname: z.string().min(1, "First name is required"),
+    email: z.email({ error: "Invalid email address" }),
+    course: z.string().min(1, "Course is required"),
+    year: z.string().min(1, "Year level is required"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
   })
-  .refine(data => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ['confirmPassword'], // This sets where the error appears
+    path: ["confirmPassword"], // This sets where the error appears
   });
 
 export type SignupCredentials = z.infer<typeof formSchema>;
@@ -58,14 +58,14 @@ export default function SignupForm({
 }: SignupFormProps) {
   const form = useForm({
     defaultValues: {
-      id: '',
-      lname: '',
-      fname: '',
-      email: '',
-      course: '',
-      year: '',
-      password: '',
-      confirmPassword: '',
+      id: "",
+      lname: "",
+      fname: "",
+      email: "",
+      course: "",
+      year: "",
+      password: "",
+      confirmPassword: "",
     } as SignupCredentials,
     validators: {
       onSubmit: formSchema,
@@ -75,7 +75,7 @@ export default function SignupForm({
   });
 
   return (
-    <Card className="w-full sm:max-w-md border-none shadow-none">
+    <Card className="w-full border-none shadow-none sm:max-w-md">
       <CardHeader>
         <CardTitle className="text-4xl font-semibold">Sign Up</CardTitle>
         <CardDescription>Become a part of the PSITS Community</CardDescription>
@@ -83,7 +83,7 @@ export default function SignupForm({
       <CardContent>
         <form
           id="signup-form"
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
           }}
@@ -93,7 +93,7 @@ export default function SignupForm({
               {/* Student ID Number */}
               <form.Field
                 name="id"
-                children={field => {
+                children={(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
@@ -106,7 +106,7 @@ export default function SignupForm({
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={e => field.handleChange(e.target.value)}
+                        onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={isInvalid}
                         placeholder="Enter your student ID number"
                         autoComplete="off"
@@ -122,7 +122,7 @@ export default function SignupForm({
                 {/* Last Name */}
                 <form.Field
                   name="lname"
-                  children={field => {
+                  children={(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
@@ -133,7 +133,7 @@ export default function SignupForm({
                           name={field.name}
                           value={field.state.value}
                           onBlur={field.handleBlur}
-                          onChange={e => field.handleChange(e.target.value)}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           aria-invalid={isInvalid}
                           placeholder="Enter last name"
                           autoComplete="off"
@@ -148,7 +148,7 @@ export default function SignupForm({
                 {/* Middle Name */}
                 <form.Field
                   name="mname"
-                  children={field => {
+                  children={(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
@@ -161,7 +161,7 @@ export default function SignupForm({
                           name={field.name}
                           value={field.state.value}
                           onBlur={field.handleBlur}
-                          onChange={e => field.handleChange(e.target.value)}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           aria-invalid={isInvalid}
                           placeholder="Enter middle name"
                           autoComplete="off"
@@ -177,7 +177,7 @@ export default function SignupForm({
               {/* First Name */}
               <form.Field
                 name="fname"
-                children={field => {
+                children={(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
@@ -188,7 +188,7 @@ export default function SignupForm({
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={e => field.handleChange(e.target.value)}
+                        onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={isInvalid}
                         placeholder="Enter your first name"
                         autoComplete="off"
@@ -203,7 +203,7 @@ export default function SignupForm({
               {/* Email Address */}
               <form.Field
                 name="email"
-                children={field => {
+                children={(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
@@ -216,7 +216,7 @@ export default function SignupForm({
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={e => field.handleChange(e.target.value)}
+                        onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={isInvalid}
                         placeholder="Enter your email"
                         autoComplete="off"
@@ -232,7 +232,7 @@ export default function SignupForm({
                 {/* Course */}
                 <form.Field
                   name="course"
-                  children={field => {
+                  children={(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
@@ -241,7 +241,7 @@ export default function SignupForm({
                         <Select
                           name={field.name}
                           value={field.state.value}
-                          onValueChange={value => field.handleChange(value)}
+                          onValueChange={(value) => field.handleChange(value)}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Choose course" />
@@ -264,7 +264,7 @@ export default function SignupForm({
                 {/* Year */}
                 <form.Field
                   name="year"
-                  children={field => {
+                  children={(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
@@ -273,7 +273,7 @@ export default function SignupForm({
                         <Select
                           name={field.name}
                           value={field.state.value}
-                          onValueChange={value => field.handleChange(value)}
+                          onValueChange={(value) => field.handleChange(value)}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Choose year" />
@@ -296,7 +296,7 @@ export default function SignupForm({
                 {/* Password */}
                 <form.Field
                   name="password"
-                  children={field => {
+                  children={(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
@@ -308,7 +308,7 @@ export default function SignupForm({
                           type="password"
                           value={field.state.value}
                           onBlur={field.handleBlur}
-                          onChange={e => field.handleChange(e.target.value)}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           aria-invalid={isInvalid}
                           placeholder="Enter password"
                           autoComplete="off"
@@ -323,7 +323,7 @@ export default function SignupForm({
                 {/* Password */}
                 <form.Field
                   name="confirmPassword"
-                  children={field => {
+                  children={(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
@@ -337,7 +337,7 @@ export default function SignupForm({
                           type="password"
                           value={field.state.value}
                           onBlur={field.handleBlur}
-                          onChange={e => field.handleChange(e.target.value)}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           aria-invalid={isInvalid}
                           placeholder="Enter password again"
                           autoComplete="off"
@@ -358,7 +358,7 @@ export default function SignupForm({
         </form>
       </CardContent>
       <CardFooter>
-        <p className="w-full mt-2 text-sm font-extralight text-gray-300 flex flex-row justify-center items-center">
+        <p className="mt-2 flex w-full flex-row items-center justify-center text-sm font-extralight text-gray-300">
           Remember your password?&nbsp;
           <Link to="/auth/login" className="text-black">
             Sign in

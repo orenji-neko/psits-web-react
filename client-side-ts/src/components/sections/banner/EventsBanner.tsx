@@ -1,8 +1,8 @@
-import { BackgroundText } from '@/components/common/BackgroundText';
+import { BackgroundText } from "@/components/common/BackgroundText";
 
 export const EventsBanner = () => {
   return (
-    <section className="relative isolate min-h-[30vh] sm:min-h-[40vh] md:min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-primary/5 to-transparent">
+    <section className="from-primary/5 relative isolate flex min-h-[30vh] items-center justify-center overflow-hidden bg-gradient-to-b to-transparent sm:min-h-[40vh] md:min-h-[50vh]">
       {/* Background Stylistic Text */}
       <BackgroundText
         text="Events"
@@ -28,11 +28,11 @@ export const EventsBanner = () => {
       />
 
       {/* Foreground Main Title */}
-      <div className="container relative z-10 flex flex-col items-center text-center">
-        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter text-foreground uppercase">
+      <div className="relative z-10 container flex flex-col items-center text-center">
+        <h1 className="text-foreground text-5xl font-black tracking-tighter uppercase sm:text-7xl md:text-8xl lg:text-9xl">
           Events
         </h1>
-        <div className="h-2 w-24 bg-primary mt-4 rounded-full" />
+        <div className="bg-primary mt-4 h-2 w-24 rounded-full" />
       </div>
     </section>
   );

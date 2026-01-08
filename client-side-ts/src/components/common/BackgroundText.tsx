@@ -1,5 +1,5 @@
-import { Card, CardDescription } from '../ui/card';
-import { cn } from '@/lib/utils';
+import { Card, CardDescription } from "../ui/card";
+import { cn } from "@/lib/utils";
 
 interface BackgroundTextProps {
   text: string;
@@ -15,13 +15,13 @@ export const BackgroundText = ({
   return (
     <Card
       className={cn(
-        'border-none shadow-none bg-transparent relative overflow-hidden pointer-events-none select-none',
+        "pointer-events-none relative overflow-hidden border-none bg-transparent shadow-none select-none",
         parentStyle
       )}
     >
       <CardDescription
         className={cn(
-          'font-black uppercase tracking-[0.2em] text-[8rem] sm:text-[12rem] md:text-[16rem] lg:text-[22rem] xl:text-[28rem] leading-none whitespace-nowrap opacity-10 inline-block transition-all duration-500',
+          "inline-block text-[8rem] leading-none font-black tracking-[0.2em] whitespace-nowrap uppercase opacity-10 transition-all duration-500 sm:text-[12rem] md:text-[16rem] lg:text-[22rem] xl:text-[28rem]",
           childStyle
         )}
       >

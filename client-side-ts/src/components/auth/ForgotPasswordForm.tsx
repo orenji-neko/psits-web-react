@@ -1,5 +1,5 @@
-import { useForm } from '@tanstack/react-form';
-import * as z from 'zod';
+import { useForm } from "@tanstack/react-form";
+import * as z from "zod";
 import {
   Card,
   CardContent,
@@ -7,15 +7,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../ui/card';
-import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import { Link } from 'react-router';
+} from "../ui/card";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Link } from "react-router";
 
 const formSchema = z.object({
-  id: z.string().min(8, 'ID Number must at least be 8 digits.'),
-  email: z.string().email('Please enter a valid email address.'),
+  id: z.string().min(8, "ID Number must at least be 8 digits."),
+  email: z.string().email("Please enter a valid email address."),
 });
 
 export type ForgotPasswordCredentials = z.infer<typeof formSchema>;
@@ -29,8 +29,8 @@ export default function ForgotPasswordForm({
 }: ForgotPasswordFormProps) {
   const form = useForm({
     defaultValues: {
-      id: '',
-      email: '',
+      id: "",
+      email: "",
     },
     validators: {
       onSubmit: formSchema,
@@ -40,7 +40,7 @@ export default function ForgotPasswordForm({
   });
 
   return (
-    <Card className="w-full sm:max-w-md border-none shadow-none">
+    <Card className="w-full border-none shadow-none sm:max-w-md">
       <CardHeader>
         <CardTitle className="text-4xl font-semibold">
           Forgot Password
@@ -52,7 +52,7 @@ export default function ForgotPasswordForm({
       <CardContent>
         <form
           id="forgot-password-form"
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
           }}
@@ -60,7 +60,7 @@ export default function ForgotPasswordForm({
           <FieldGroup>
             <form.Field
               name="id"
-              children={field => {
+              children={(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
@@ -73,7 +73,7 @@ export default function ForgotPasswordForm({
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={e => field.handleChange(e.target.value)}
+                      onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       placeholder="Enter your student ID number"
                       autoComplete="off"
@@ -87,7 +87,7 @@ export default function ForgotPasswordForm({
             />
             <form.Field
               name="email"
-              children={field => {
+              children={(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
@@ -99,7 +99,7 @@ export default function ForgotPasswordForm({
                       type="email"
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={e => field.handleChange(e.target.value)}
+                      onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       placeholder="Enter your email address"
                       autoComplete="off"
@@ -120,7 +120,7 @@ export default function ForgotPasswordForm({
             Reset Password
           </Button>
         </Field>
-        <p className="mt-2 text-sm font-extralight text-gray-300 flex flex-row justify-center items-center">
+        <p className="mt-2 flex flex-row items-center justify-center text-sm font-extralight text-gray-300">
           Remember your password?&nbsp;
           <Link to="/auth/login" className="text-black">
             Sign in

@@ -1,5 +1,5 @@
-import { useForm } from '@tanstack/react-form';
-import * as z from 'zod';
+import { useForm } from "@tanstack/react-form";
+import * as z from "zod";
 import {
   Card,
   CardContent,
@@ -7,16 +7,16 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../ui/card';
-import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
-import { Link } from 'react-router';
+} from "../ui/card";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
+import { Link } from "react-router";
 
 const formSchema = z.object({
-  id: z.string().min(8, 'ID Number must at least be 8 digits.'),
-  password: z.string().min(8, 'Password must at least be 8 characters'),
+  id: z.string().min(8, "ID Number must at least be 8 digits."),
+  password: z.string().min(8, "Password must at least be 8 characters"),
   rememberMe: z.boolean(),
 });
 
@@ -29,8 +29,8 @@ export interface LoginFormProps {
 export default function LoginForm({ onLogin }: LoginFormProps) {
   const form = useForm({
     defaultValues: {
-      id: '',
-      password: '',
+      id: "",
+      password: "",
       rememberMe: false,
     },
     validators: {
@@ -41,7 +41,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
   });
 
   return (
-    <Card className="w-full sm:max-w-md border-none shadow-none">
+    <Card className="w-full border-none shadow-none sm:max-w-md">
       <CardHeader>
         <CardTitle className="text-4xl font-semibold">Welcome Back</CardTitle>
         <CardDescription>
@@ -51,7 +51,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
       <CardContent>
         <form
           id="login-form"
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
           }}
@@ -59,7 +59,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
           <FieldGroup>
             <form.Field
               name="id"
-              children={field => {
+              children={(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
@@ -72,7 +72,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={e => field.handleChange(e.target.value)}
+                      onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       placeholder="Enter your student ID number"
                       autoComplete="off"
@@ -86,7 +86,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
             />
             <form.Field
               name="password"
-              children={field => {
+              children={(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
@@ -98,7 +98,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
                       type="password"
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={e => field.handleChange(e.target.value)}
+                      onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       autoComplete="off"
                     />
@@ -112,7 +112,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
             <div className="flex flex-row justify-between">
               <form.Field
                 name="rememberMe"
-                children={field => {
+                children={(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
@@ -121,7 +121,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
                         id={field.name}
                         name={field.name}
                         checked={field.state.value}
-                        onCheckedChange={checked =>
+                        onCheckedChange={(checked) =>
                           field.handleChange(checked === true)
                         }
                       />
@@ -134,7 +134,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
               />
               <Link
                 to="/auth/forgot-password"
-                className="w-full text-sm text-right font-extralight"
+                className="w-full text-right text-sm font-extralight"
               >
                 Forgot Password
               </Link>
@@ -148,7 +148,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
             Sign in
           </Button>
         </Field>
-        <p className="mt-2 text-sm font-extralight text-gray-300 flex flex-row justify-center items-center">
+        <p className="mt-2 flex flex-row items-center justify-center text-sm font-extralight text-gray-300">
           Don't have an account?&nbsp;
           <Link to="/auth/signup" className="text-black">
             Sign up

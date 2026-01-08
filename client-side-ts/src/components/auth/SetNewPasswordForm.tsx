@@ -1,31 +1,31 @@
-import { useForm } from '@tanstack/react-form';
-import * as z from 'zod';
+import { useForm } from "@tanstack/react-form";
+import * as z from "zod";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card';
+} from "../ui/card";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
   FieldSet,
-} from '../ui/field';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import { Link } from 'react-router';
+} from "../ui/field";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Link } from "react-router";
 
 const formSchema = z
   .object({
-    password: z.string().min(8, 'Password must be at least 8 characters'),
+    password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
   })
-  .refine(data => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ['confirmPassword'],
+    path: ["confirmPassword"],
   });
 
 export type SetNewPasswordCredentials = z.infer<typeof formSchema>;
@@ -41,8 +41,8 @@ export default function SetNewPasswordForm({
 }: SetNewPasswordFormProps) {
   const form = useForm({
     defaultValues: {
-      password: '',
-      confirmPassword: '',
+      password: "",
+      confirmPassword: "",
     } as SetNewPasswordCredentials,
     validators: {
       onSubmit: formSchema,
@@ -52,7 +52,7 @@ export default function SetNewPasswordForm({
   });
 
   return (
-    <Card className="w-full sm:max-w-md border-none shadow-none">
+    <Card className="w-full border-none shadow-none sm:max-w-md">
       <CardHeader>
         <CardTitle className="text-4xl font-semibold">
           Set New Password
@@ -64,7 +64,7 @@ export default function SetNewPasswordForm({
       <CardContent>
         <form
           id="set-new-password-form"
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
           }}
@@ -74,7 +74,7 @@ export default function SetNewPasswordForm({
               {/* New Password */}
               <form.Field
                 name="password"
-                children={field => {
+                children={(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
@@ -86,7 +86,7 @@ export default function SetNewPasswordForm({
                         type="password"
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={e => field.handleChange(e.target.value)}
+                        onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={isInvalid}
                         placeholder="Enter new password"
                         autoComplete="off"
@@ -101,7 +101,7 @@ export default function SetNewPasswordForm({
               {/* Confirm Password */}
               <form.Field
                 name="confirmPassword"
-                children={field => {
+                children={(field) => {
                   const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid;
                   return (
@@ -115,7 +115,7 @@ export default function SetNewPasswordForm({
                         type="password"
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={e => field.handleChange(e.target.value)}
+                        onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={isInvalid}
                         placeholder="Enter password again"
                         autoComplete="off"
@@ -138,7 +138,7 @@ export default function SetNewPasswordForm({
                 onClick={onBack}
                 asChild={!onBack}
               >
-                {onBack ? 'Back' : <Link to="/auth/login">Back</Link>}
+                {onBack ? "Back" : <Link to="/auth/login">Back</Link>}
               </Button>
             </Field>
           </FieldGroup>

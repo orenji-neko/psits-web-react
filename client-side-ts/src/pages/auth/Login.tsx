@@ -1,4 +1,4 @@
-import LoginForm, { type LoginCredentials } from '@/components/auth/LoginForm';
+import LoginForm, { type LoginCredentials } from "@/components/auth/LoginForm";
 
 export default function Login() {
   const handleLogin = (_values: LoginCredentials) => {
@@ -6,8 +6,8 @@ export default function Login() {
   };
 
   return (
-    <div className="w-screen h-screen bg-gray-300 flex flex-row">
-      <div className="w-full md:w-1/2 bg-white flex justify-center items-center">
+    <div className="flex h-screen w-screen flex-row bg-gray-300">
+      <div className="flex w-full items-center justify-center bg-white md:w-1/2">
         <LoginForm onLogin={handleLogin} />
       </div>
     </div>
