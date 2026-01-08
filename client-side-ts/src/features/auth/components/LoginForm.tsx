@@ -7,51 +7,55 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router";
 
 const formSchema = z.object({
   id: z.string().min(8, "ID Number must at least be 8 digits."),
-  email: z.string().email("Please enter a valid email address."),
+  password: z.string().min(8, "Password must at least be 8 characters"),
+  rememberMe: z.boolean(),
 });
 
-export type ForgotPasswordCredentials = z.infer<typeof formSchema>;
+export type LoginCredentials = z.infer<typeof formSchema>;
 
-export interface ForgotPasswordFormProps {
-  onSubmit?: (values: ForgotPasswordCredentials) => void;
+export interface LoginFormProps {
+  onLogin?: (values: LoginCredentials) => void;
 }
 
-export default function ForgotPasswordForm({
-  onSubmit,
-}: ForgotPasswordFormProps) {
+export default function LoginForm({ onLogin }: LoginFormProps) {
   const form = useForm({
     defaultValues: {
       id: "",
-      email: "",
+      password: "",
+      rememberMe: false,
     },
     validators: {
       onSubmit: formSchema,
     },
-    onSubmit: async ({ value }: { value: ForgotPasswordCredentials }) =>
-      onSubmit && onSubmit(value),
+    onSubmit: async ({ value }: { value: LoginCredentials }) =>
+      onLogin && onLogin(value),
   });
 
   return (
     <Card className="w-full border-none shadow-none sm:max-w-md">
       <CardHeader>
-        <CardTitle className="text-4xl font-semibold">
-          Forgot Password
-        </CardTitle>
+        <CardTitle className="text-4xl font-semibold">Welcome Back</CardTitle>
         <CardDescription>
-          Enter your student ID number to reset your password.
+          Welcome back! Please enter your details.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form
-          id="forgot-password-form"
+          id="login-form"
           onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
@@ -86,22 +90,21 @@ export default function ForgotPasswordForm({
               }}
             />
             <form.Field
-              name="email"
+              name="password"
               children={(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Email Address</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}
-                      type="email"
+                      type="password"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
-                      placeholder="Enter your email address"
                       autoComplete="off"
                     />
                     {isInvalid && (
@@ -111,19 +114,49 @@ export default function ForgotPasswordForm({
                 );
               }}
             />
+            <div className="flex flex-row justify-between">
+              <form.Field
+                name="rememberMe"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid} orientation="horizontal">
+                      <Checkbox
+                        id={field.name}
+                        name={field.name}
+                        checked={field.state.value}
+                        onCheckedChange={(checked) =>
+                          field.handleChange(checked === true)
+                        }
+                      />
+                      <FieldLabel htmlFor={field.name} className="font-normal">
+                        Remember Me
+                      </FieldLabel>
+                    </Field>
+                  );
+                }}
+              />
+              <Link
+                to="/auth/forgot-password"
+                className="w-full text-right text-sm font-extralight"
+              >
+                Forgot Password
+              </Link>
+            </div>
           </FieldGroup>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col">
         <Field orientation="horizontal">
-          <Button type="submit" form="forgot-password-form" className="w-full">
-            Reset Password
+          <Button type="submit" form="login-form" className="w-full">
+            Sign in
           </Button>
         </Field>
         <p className="mt-2 flex flex-row items-center justify-center text-sm font-extralight text-gray-300">
-          Remember your password?&nbsp;
-          <Link to="/auth/login" className="text-black">
-            Sign in
+          Don't have an account?&nbsp;
+          <Link to="/auth/signup" className="text-black">
+            Sign up
           </Link>
         </p>
       </CardFooter>

@@ -23,14 +23,6 @@ export const GetInvolvedSection = () => {
       const contentHeight = cardsRef.current.scrollHeight;
       // Max scroll = how much content overflows
       const scroll = Math.max(0, contentHeight - visibleHeight);
-      console.log(
-        "visible:",
-        visibleHeight,
-        "content:",
-        contentHeight,
-        "maxScroll:",
-        scroll
-      );
       setMaxScroll(scroll);
     } else {
       setMaxScroll(0);

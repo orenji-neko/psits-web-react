@@ -1,14 +1,13 @@
-import { CardTitle } from "../ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "../ui/carousel";
+} from "@/components/ui/carousel";
 import { organizationSectionData, type Member } from "@/data/sections-data";
-import { OptimizedImage } from "@/components/common/OptimizedImage";
 
 export default function OrganizationSection() {
   return (

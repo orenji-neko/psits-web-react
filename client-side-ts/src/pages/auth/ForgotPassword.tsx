@@ -1,6 +1,7 @@
-import ForgotPasswordForm, {
+import {
+  ForgotPasswordForm,
   type ForgotPasswordCredentials,
-} from "@/components/auth/ForgotPasswordForm";
+} from "@/features/auth";
 
 export default function ForgotPassword() {
   const handleForgotPassword = (_values: ForgotPasswordCredentials) => {

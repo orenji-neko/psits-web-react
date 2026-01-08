@@ -1,7 +1,7 @@
 import { goalSectionData } from "@/data/sections-data";
 import { motion } from "framer-motion";
 
-export default function GoalSection() {
+export default function GoalsSection() {
   return (
     <section className="bg-background relative overflow-hidden py-20 xl:py-28">
       {/* Background Elements */}

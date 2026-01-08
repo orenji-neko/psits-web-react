@@ -1,4 +1,4 @@
-import OTPForm from "@/components/auth/OTPForm";
+import { OTPForm } from "@/features/auth";
 
 export default function OTPCode() {
   const handleResend = () => {

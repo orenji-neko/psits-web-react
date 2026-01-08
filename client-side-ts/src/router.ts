@@ -1,9 +1,9 @@
 import { createBrowserRouter, Outlet } from "react-router";
 import { MainLayout } from "./layouts/MainLayout";
 import { AdminLayout } from "./layouts/AdminLayout";
-import { Home } from "./pages/Home";
-import { Events } from "./pages/Events";
-import { Organizations } from "./pages/Organizations";
+import { Home } from "./pages/home";
+import { Events } from "./pages/events";
+import { Organizations } from "./pages/organizations";
 import OTPCode from "./pages/auth/OtpCode";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { TermsOfCondition } from "./pages/TermsOfCondition";

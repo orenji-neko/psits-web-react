@@ -1,5 +1,7 @@
-import type { SetNewPasswordCredentials } from "@/components/auth/SetNewPasswordForm";
-import SetNewPasswordForm from "@/components/auth/SetNewPasswordForm";
+import {
+  SetNewPasswordForm,
+  type SetNewPasswordCredentials,
+} from "@/features/auth";
 
 export default function SetNewPassword() {
   const handleSetNewPassword = (_values: SetNewPasswordCredentials) => {

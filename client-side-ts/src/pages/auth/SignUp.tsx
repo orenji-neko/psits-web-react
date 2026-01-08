@@ -1,6 +1,4 @@
-import SignupForm, {
-  type SignupCredentials,
-} from "@/components/auth/SignupForm";
+import { SignupForm, type SignupCredentials } from "@/features/auth";
 
 const courses = ["BSIT", "BSCS"];
 

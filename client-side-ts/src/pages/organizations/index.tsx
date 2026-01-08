@@ -1,4 +1,4 @@
-import OrganizationSection from "@/components/organization/OrganizationSection";
+import OrganizationSection from "./sections/OrganizationSection";
 
 export const Organizations = () => {
   return (

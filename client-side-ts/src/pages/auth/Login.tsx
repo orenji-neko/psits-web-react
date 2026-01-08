@@ -1,4 +1,4 @@
-import LoginForm, { type LoginCredentials } from "@/components/auth/LoginForm";
+import { LoginForm, type LoginCredentials } from "@/features/auth";
 
 export default function Login() {
   const handleLogin = (_values: LoginCredentials) => {
