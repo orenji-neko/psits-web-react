@@ -1,8 +1,6 @@
-import SignupForm, {
-  type SignupCredentials,
-} from '@/components/auth/SignupForm';
+import { SignupForm, type SignupCredentials } from "@/features/auth";
 
-const courses = ['BSIT', 'BSCS'];
+const courses = ["BSIT", "BSCS"];
 
 export default function Signup() {
   const handleSignup = (_values: SignupCredentials) => {
@@ -10,8 +8,8 @@ export default function Signup() {
   };
 
   return (
-    <div className="w-screen h-screen bg-gray-300 flex flex-row">
-      <div className="w-full md:w-1/2 bg-white flex justify-center items-center">
+    <div className="flex h-screen w-screen flex-row bg-gray-300">
+      <div className="flex w-full items-center justify-center bg-white md:w-1/2">
         <SignupForm onSignup={handleSignup} courses={courses} />
       </div>
     </div>
